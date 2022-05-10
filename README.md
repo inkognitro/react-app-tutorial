@@ -2,13 +2,14 @@
 
 # react-app-tutorial
 The purpose of this tutorial is to better understand the concepts of React and to build a clean architecture on it.
-You should be familiar with Javascript (ES6+) and React + JSX (react).
-This tutorial is written in Typescript, but I think most people who understand Javascript ES6+ can also learn
-Typescript by doing this tutorial. It is just "type safe javascript".
+You should be familiar with Javascript ES6+, React and JSX.
+This tutorial is written in Typescript, but I think most people who understand Javascript can also learn
+Typescript by doing this tutorial. It is just "javascript with some type information".
 
-### What to build
+### What we build
 We are going to build a single page app with an `index` and a `register user page`.
 The user registration form is going to be wired with a mocked api over http to also cover network traffic.
+The output of this tutorial is a clean and reusable framework built on top of react.
 
 ### Out of scope
 We do not cover [redux](https://redux.js.org/) in this tutorial.
