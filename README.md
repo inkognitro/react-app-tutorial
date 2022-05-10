@@ -1,20 +1,24 @@
+[![BadgeMITLicense: MIT](./docs/MIT.svg)](LICENSE)
+
 # react-app-tutorial
-LICENCE: 2022 MIT, Marcel Fischer
+The purpose of this tutorial is to better understand the concepts of React and to build a clean architecture on it.
+You should be familiar with Javascript (ES6+) and React + JSX (react).
+This tutorial is written in Typescript, but I think most people who understand Javascript ES6+ can also learn
+Typescript by doing this tutorial. It is just "type safe javascript".
 
-## Introduction (this file):
-Preconditions:
-    - Javascript
-    - JSX (react)
-    - Typescript
-
-## Tutorial
-
-### What we are going to build
+### What to build
 We are going to build a single page app with an `index` and a `register user page`.
-The user registration form is going to be wired with a mocked api over http (mocked api is written in Go).
-Redux is out of scope of this tutorial.
+The user registration form is going to be wired with a mocked api over http to also cover network traffic.
 
-### Steps
+### Out of scope
+We do not cover [redux](https://redux.js.org/) in this tutorial.
+In my opinion and especially in this time (with React 16+) I think redux is an overkill for most cases.
+The trade-off between redux's code-splitting and therefore its higher complexity overwhelms the benefits of
+performance optimizations. I experienced that encapsulated components with its callbacks are a lot easier to understand and
+less error prone than reducers, actions and components which are split into different parts in the code base.
+For global and non steadily changed state I would suggest using the React's `useContext` hook.
+
+### Tutorial steps
 1. Setup react app from scratch
    - installation with create-react-app
    - code structure (packages/core, spa) and the "whys" (take explanations from coding guidelines)
