@@ -58,11 +58,11 @@ Redux is out of scope of this tutorial.
    - create [axios](https://axios-http.com) `http` request handler
    - create ApiV1RequestHandler
    - define `registerUserEndpoint.ts` with `shouldFail: boolean` param
-   - build the `useApiV1RequestHandler` hook (without toaster link)
+   - build the `useApiV1RequestHandler` hook, open for middleware
 10. Wire the User registration form
     - use the `useApiV1RequestHandler` hook
     - make two buttons `registerAndSucceed` and `registerAndFail` 
-    - extend the `useApiV1RequestHandler` hook with `showToastMessages: boolean`
+    - extend the `useApiV1RequestHandler` hook with `showToastMessages: boolean` and its middleware
 11. Summing up
     - What to do next: Optimize with [NextJs](https://nextjs.org)?
     - Some differences to current architecture in naming (Provided Vs. Provider)
