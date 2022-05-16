@@ -11,13 +11,13 @@ In this tutorial we go with [create-react-app](https://reactjs.org/docs/create-a
 
 [Create-react-app](https://reactjs.org/docs/create-a-new-react-app.html) is built with the [webpack](https://webpack.js.org/)
 bundler which supports several [loaders](https://webpack.js.org/loaders/).
-Webpack loaders do transpile newer javascript or event typescript to older javascript (e.g. ES5)
+Webpack loaders do transpile newer javascript or even typescript to older javascript (e.g. ES5)
 which is readable for all browsers.
-Not only Webpack handles the transpiling, it also supports hot reloading, code splitting and finally the bundling of your
+Not only Webpack handles the transpiling, but also supports hot reloading, code splitting and finally the bundling of your
 production app. So Webpack takes care of a lot of stuff which makes our life much easier.
 
 ### 1.1 Installation
-[create-react-app.dev](https://create-react-app.dev) makes it stunningly fast to start a new react project.
+With [create-react-app](https://create-react-app.dev) it goes stunningly fast to start a new React project.
 The only thing you need todo is to open your console and create a new project folder by executing the command below.
 This command is going to download the typescript starter template for new react apps.
 
@@ -26,8 +26,8 @@ npx create-react-app my-project --template typescript
 ```
 This one might take a few minutes.
 
-As soon as the installation process is finished, you can test if everything works by starting the app.
-To start the app you can open the recently created `package.json` and execute the `start` script by clicking the green "play" button.
+As soon as the installation process is finished, you can test if everything works as expected by starting the app.
+To start the app you open the `package.json` and execute the `start` script by clicking the green "play" button.
 Alternatively you can execute the script with `npm start` directly from your console (`cd my-project`, `npm start`).
 Now you should be able to see the following content in your browser at `localhost:3000`.
 
@@ -35,13 +35,30 @@ Now you should be able to see the following content in your browser at `localhos
 ![CreateReactApp :: Start Page](docs/01-01-start-page.png "CreateReactApp :: Start Page")
 
 Yay! You've just started the app in the dev mode.
-Your code changes are going to be hot reloaded in the browser,
-no need to refresh the page after saving your files.
-Thanks to webpack and create-react-app. Awesome!
+Your code changes are going to be hot reloaded in the browser.
+Awesome! No need to refresh the page after saving your files!
+Thanks to webpack and create-react-app.
 
 ### 1.2 Time to commit, but...
 ...before we make our first commit, let's add an entry to the recently created `.gitignore` file to prevent committing our
 IDE files. Add a new line `.idea/` in case of a JetBrains IDE (e.g. WebStorm or PhpStorm) or
 `.vscode/` if you use Visual Studio Code.
+
+### 1.3 Clean up
+Before we start building things, I suggest cleaning up the app template a bit.
+
+If we look at our project we can see an `src/App.css` and an `src/index.css` file.
+Let's delete those imports in `src/index.tsx` and `src/App.tsx` and also these css files.
+We are going to solve styling issues with [styled-components](https://styled-components.com/) and here is the **why**:
+
+If we have look at [VueJs](https://vuejs.org), there exists a pattern called [Single File Components](https://vuejs.org/guide/scaling-up/sfc.html):
+
+> In modern UI development, we have found that instead of dividing the codebase into three huge layers
+> that interweave with one another, it makes much more sense to divide them into loosely-coupled components
+> and compose them.
+> Inside a component, its template, logic, and styles are inherently coupled, and collocating them actually
+> makes the component more cohesive and maintainable.
+>
+> `https://vuejs.org/guide/scaling-up/sfc.html, 2022-05-16`
 
 [« introduction](README.md) | [next »](02-routing.md)

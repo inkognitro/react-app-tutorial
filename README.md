@@ -32,10 +32,10 @@ Below you can see an overview of all steps of this tutorial.
 1. Setup react app from scratch
    - installation with create-react-app
    - code structure (packages/core, spa) and the "whys" (take explanations from coding guidelines)
-   - routing with react-router-dom
    - install material ui
    - install styled-components (reference VueJs strategy)
 2. Pages skeletons
+   - routing with react-router-dom
    - page layout
    - navigation
    - index page
