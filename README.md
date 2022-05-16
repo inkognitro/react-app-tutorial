@@ -6,8 +6,8 @@ To go through this tutorial without a lot of pain, you should be familiar with J
 This tutorial is written in Typescript, but I think most people who understand Javascript can also learn
 Typescript by doing this tutorial. No need to panic: It is just "javascript with type hints".
 
-### What we build
-We are going to build a single page app with an `index` and a `register user page`.
+### What we are going to build together
+Together we are going to build a single page app with an `index` and a `register user page`.
 The user registration form is going to be wired with a mocked api over http to also cover network traffic.
 The output of this tutorial is a clean and reusable framework built on top of react.
 
@@ -18,6 +18,15 @@ The trade-off between redux's code-splitting and therefore its higher complexity
 performance optimizations. I experienced that encapsulated components with its callbacks are a lot easier to understand and
 less error prone than reducers, actions and components which are split into different parts in the code base.
 For global and non steadily changed state I would suggest using the React's `useContext` hook.
+
+### Tutorial steps
+Below you can see an overview of all steps of this tutorial.
+
+1. [Setup from scratch](01-setup.md) - Installation from create-react-app, setup structure, install packages
+2. [Routing](02-routing.md) - Prepare page layouts and the page's skeletons
+3. [Current user (auth)](03-auth.md) - Create an authorization context for the current user
+
+[Let's start »](01-setup.md)
 
 ### Tutorial steps
 1. Setup react app from scratch
