@@ -1,6 +1,6 @@
-[« previous](01-setup.md) | [next »](03-auth.md)
+[« previous](02-auth.md) | [next »](04-foo.md)
 
-## 2. Routing
+## 3. Routing
 
 Every browser app with multiple pages requires some routing mechanism.
 In case of React the most common library to have in mind is [react-router](https://reactrouter.com).
@@ -13,4 +13,6 @@ Install it with:
 npm install --save react-router-dom
 ```
 
-[« previous](01-setup.md) | [next »](03-auth.md)
+
+
+[« previous](02-auth.md) | [next »](04-foo.md)

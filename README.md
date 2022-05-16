@@ -23,8 +23,8 @@ For global and non steadily changed state I would suggest using the React's `use
 Below you can see an overview of all steps of this tutorial.
 
 1. [Setup from scratch](01-setup.md) - Installation from create-react-app, setup structure, install packages
-2. [Routing](02-routing.md) - Prepare page layouts and the page's skeletons
-3. [Current user (auth)](03-auth.md) - Create an authorization context for the current user
+3. [Auth](02-auth.md) - Authorization context for the current user
+2. [Routing](03-routing.md) - Prepare page layouts and the page's skeletons
 
 [Let's start »](01-setup.md)
 

@@ -1,4 +1,4 @@
-[« introduction](README.md) | [next »](02-routing.md)
+[« introduction](README.md) | [next »](03-routing.md)
 
 ## 1. Setup from scratch
 
@@ -63,4 +63,4 @@ If we have look at [VueJs](https://vuejs.org), there exists a pattern called [Si
 
 As you can see, this pattern significantly reduces code complexity.
 
-[« introduction](README.md) | [next »](02-routing.md)
+[« introduction](README.md) | [next »](03-routing.md)
