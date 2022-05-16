@@ -48,7 +48,7 @@ IDE files. Add a new line `.idea/` in case of a JetBrains IDE (e.g. WebStorm or 
 Before we start building things, I suggest cleaning up the app template a bit.
 
 If we look at our project we can see an `src/App.css` and an `src/index.css` file.
-Let's delete those imports in `src/index.tsx` and `src/App.tsx` and also these css files.
+Let's delete those imports in `src/index.tsx` and `src/App.tsx` and also the css files.
 We are going to solve styling issues with [styled-components](https://styled-components.com/) and here is the **why**:
 
 If we have look at [VueJs](https://vuejs.org), there exists a pattern called [Single File Components](https://vuejs.org/guide/scaling-up/sfc.html):
@@ -60,5 +60,7 @@ If we have look at [VueJs](https://vuejs.org), there exists a pattern called [Si
 > makes the component more cohesive and maintainable.
 >
 > `https://vuejs.org/guide/scaling-up/sfc.html, 2022-05-16`
+
+As you can see, this pattern significantly reduces code complexity.
 
 [« introduction](README.md) | [next »](02-routing.md)
