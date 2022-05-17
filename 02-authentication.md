@@ -26,7 +26,7 @@ The sentence before already implies, that we need two different types of a curre
 One for an anonymous and one for a logged-in user.
 So let's create these two with a generic, which is distinguishable by its `type` property.
 
-> :bulb: The automatic type cast for a union type to one of its specific types in TS, can be reached with a unique value for the specific type's property defined in the generic type.
+> :bulb: The automatic type cast for a union type to one of its specific types can be reached with a condition on its unique value of the specific type's property, which is defined at the generic type, building the base for every specific type of the union type.
 
 So let's add following files to the codebase:
 
