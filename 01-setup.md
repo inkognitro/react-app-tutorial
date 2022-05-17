@@ -44,7 +44,7 @@ Thanks to webpack and create-react-app.
 IDE files. Add a new line `.idea/` in case of a JetBrains IDE (e.g. WebStorm or PhpStorm) or
 `.vscode/` if you use Visual Studio Code.
 
-### 1.3 Clean up
+### 1.3 The SFC pattern
 Before we start building things, I suggest cleaning up the app template a bit.
 
 If we look at our project we can see an `src/App.css` and an `src/index.css` file.
@@ -64,3 +64,45 @@ If we have look at [VueJs](https://vuejs.org), there exists a pattern called [Si
 As you can see, this pattern significantly reduces code complexity.
 
 [« introduction](README.md) | [next »](03-routing.md)
+
+### 1.4 Setup linting
+With unified linting rules a team can agree on the same coding style.
+This increases the code readability for each individual team member and therefore increases productivity.
+
+Luckily create-react-app comes with installed linting packages out of the box.
+I suggest integrating the linting process in your CI pipeline, or at least the automatic check of the linting rules.
+To have the choice between these two options let's add `prettier` in combination with the already installed `eslint`:
+
+```
+npm install eslint-plugin-prettier@latest --save-dev
+```
+Now extend the `eslintConfig` in your `package.json` that this property looks like so:
+```json
+"eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "plugins": [
+      "@typescript-eslint",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": "error",
+      "@typescript-eslint/no-redeclare": [
+        "error"
+      ]
+    }
+},
+```
+
+Finally, we need to extend the `scripts` section in the `package.json`, to easily access
+the mentioned two options from above.
+```json
+"lint": "eslint ./src --ext .ts,.tsx",
+"lint:fix": "tsc && eslint ./src --ext .ts,.tsx --quiet --fix"
+```
+
+You now should be able to test it by running `npm run lint` in your console.
+This should print what needs to be corrected if some code does not correspond with the linting rules.
+If you run `npm run lint:fix`, the code is going to be automatically fixed when possible.
