@@ -1,4 +1,4 @@
-[« introduction](README.md) | [next »](03-routing.md)
+[« introduction](README.md) | [next »](02-authentication.md)
 
 ## 1. Setup from scratch
 
@@ -63,8 +63,6 @@ If we have look at [VueJs](https://vuejs.org), there exists a pattern called [Si
 
 As you can see, this pattern significantly reduces code complexity.
 
-[« introduction](README.md) | [next »](03-routing.md)
-
 ### 1.4 Setup linting
 With unified linting rules a team can agree on the same coding style.
 This increases the code readability for each individual team member and therefore increases productivity.
@@ -111,3 +109,5 @@ You probably noticed the `tsc &&` at the start of the `lint:fix` script.
 This is to prevent from automatic linting fixes on type errors.
 Once, I forgot to implement this check and run the `lint:fix` script, and it totally messed up my code base.
 Luckily I hadn't committed yet. With that you are save, or at least a bit more :innocent:
+
+[« introduction](README.md) | [next »](02-authentication.md)

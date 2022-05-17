@@ -1,4 +1,4 @@
-[« previous](02-auth.md) | [next »](04-foo.md)
+[« previous](02-authentication.md) | [next »](04-foo.md)
 
 ## 3. Routing
 
@@ -15,4 +15,4 @@ npm install --save react-router-dom
 
 
 
-[« previous](02-auth.md) | [next »](04-foo.md)
+[« previous](02-authentication.md) | [next »](04-foo.md)
