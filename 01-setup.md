@@ -103,6 +103,11 @@ the mentioned two options from above.
 "lint:fix": "tsc && eslint ./src --ext .ts,.tsx --quiet --fix"
 ```
 
-You now should be able to test it by running `npm run lint` in your console.
-This should print what needs to be corrected if some code does not correspond with the linting rules.
-If you run `npm run lint:fix`, the code is going to be automatically fixed when possible.
+You should now be able to test the linting by running `npm run lint` in your console.
+This prints the result of what needs to be corrected if some code does not correspond with the linting rules.
+If you run `npm run lint:fix`, the code style is going to be automatically fixed when possible.
+
+You probably noticed the `tsc &&` at the start of the `lint:fix` script.
+This is to prevent from automatic linting fixes on type errors.
+Once, I forgot to implement this check and run the `lint:fix` script, and it totally messed up my code base.
+Luckily I hadn't committed yet. With that you are save, or at least a bit more :innocent:
