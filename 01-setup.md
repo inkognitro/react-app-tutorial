@@ -29,9 +29,9 @@ This one might take a few minutes.
 As soon as the installation process is finished, you can test if everything works as expected by starting the app.
 To start the app you open the `package.json` and execute the `start` script by clicking the green "play" button.
 Alternatively you can execute the script with `npm start` directly from your console (`cd my-project`, `npm start`).
-Now you should be able to see the following content in your browser at `localhost:3000`.
 
-*http://localhost:3000*
+Now you should be able to see the following content in your browser at `localhost:3000`:
+
 ![CreateReactApp :: Start Page](docs/01-01-start-page.png "CreateReactApp :: Start Page")
 
 Yay! You've just started the app in the dev mode.
