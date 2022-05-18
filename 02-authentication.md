@@ -149,7 +149,8 @@ Let's use it in our app now!
 
 ### 2.5 Using the auth package
 With DI we usually need something like a service container which provides our service implementations.
-So let's create a service provider component which we can our `<App>` component with:
+So let's create a service provider component to provide some services and states to all of its nested child components.
+These services or states can be accessed by custom hooks, like our `useCurrentUserRepository` or `useCurrentUser` hooks.
 
 ```typescript
 // src/ServiceProvider.tsx
@@ -177,8 +178,11 @@ export const ServiceProvider: FC<PropsWithChildren<{}>> = props => {
     );
 };
 ```
-Make sure the `<App>` component is wrapped with the service provider.
-We should do this directly in the entry point which bootstraps the app in the browser.
+We should wrap our app directly in the entry point which is responsible to bootstraps the app in the browser,
+because this service provider bootstraps the service implementations for browser environments
+(e.g. see `BrowserCurrentUserRepository`).
+So let's extend the given `index.tsx` with our created service provider
+and make sure that the `<App>` component is wrapped with it.
 
 ```typescript
 // src/index.tsx
@@ -200,8 +204,10 @@ root.render(
 );
 ```
 
-As you can see, we used the `BrowserCurrentUserRepository`. It is using the browser's local storage and
-therefore not really suitable for testing. As you already might have noticed, it exists a `src/App.test.tsx` file,
+We use the `BrowserCurrentUserRepository` in . It is using the browser's local storage and
+therefore is not suitable for testing.
+
+As you already might have noticed, it exists a `src/App.test.tsx` file,
 provided by [create-react-app](https://create-react-app.dev).
 As we learned above, the contained `<App />` in `App.test.tsx` should be bootstrapped with other services than
 implementations for the browser: Tests just run locally in the console, not in the browser.
