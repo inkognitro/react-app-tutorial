@@ -31,7 +31,7 @@ So let's create these two with a generic, which is distinguishable by its `type`
 So let's add following files to the codebase:
 
 ```typescript
-// packages/core/auth/authUser.ts
+// src/packages/core/auth/authUser.ts
 
 type AuthUserType = "anonymous" | "authenticated";
 type GenericUser<T extends AuthUserType, Payload extends object = {}> = { type: T } & Payload;
@@ -62,7 +62,7 @@ We also need a repository (a service) to keep the current user after a page refr
 We should be able to mock/stub this service for testing purposes.
 
 ```typescript
-// packages/core/auth/currentUser.ts
+// src/packages/core/auth/currentUser.ts
 
 import { AnonymousAuthUser, AuthUser } from "./authUser";
 import { createContext, useContext } from "react";
@@ -84,7 +84,7 @@ export function useCurrentUser(): AuthUser {
 and
 
 ```typescript
-// packages/core/auth/currentUserRepository.ts
+// src/packages/core/auth/currentUserRepository.ts
 
 import { createContext, useContext } from "react";
 import { AuthUser } from "./authUser";
@@ -139,7 +139,7 @@ In Node, it is usual to provide a package's public API by an index file.
 So to properly finalize our `auth` package we also add this clue code.
 
 ```typescript
-// packages/core/auth/currentUserRepository.ts
+// src/packages/core/auth/currentUserRepository.ts
 export * from "./authUser";
 export * from "./currentUser";
 export * from "./currentUserRepository";
@@ -148,6 +148,62 @@ Well done! We've created our first independent package code.
 Let's use it in our app now!
 
 ### 2.5 Using the auth package
-tbd...
+With DI we usually need something like a service container which provides our service implementations.
+So let's create a service provider component which we can our `<App>` component with:
+
+```typescript
+// src/ServiceProvider.tsx
+
+import React, { FC, PropsWithChildren, useRef, useState } from "react";
+import {
+    anonymousAuthUser,
+    AuthUser,
+    BrowserCurrentUserRepository,
+    CurrentUserProvider,
+    CurrentUserRepositoryProvider,
+} from "./packages/core/auth";
+
+export const ServiceProvider: FC<PropsWithChildren<{}>> = props => {
+    const [currentUserState, setCurrentUserState] = useState<AuthUser>(anonymousAuthUser); // triggers a rerender on change
+    const browserCurrentUserRepositoryRef = useRef(
+        new BrowserCurrentUserRepository(setCurrentUserState)
+    );
+    return (
+        <CurrentUserRepositoryProvider value={browserCurrentUserRepositoryRef.current}>
+            <CurrentUserProvider value={currentUserState}>
+                {props.children}
+            </CurrentUserProvider> 
+        </CurrentUserRepositoryProvider>
+    );
+};
+```
+Make sure the `<App>` component is wrapped with the service provider.
+We should do this directly in the entry point which bootstraps the app in the browser.
+
+```typescript
+// src/index.tsx
+
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ServiceProvider } from "./ServiceProvider";
+
+const root = ReactDOM.createRoot(
+    document.getElementById("root") as HTMLElement
+);
+root.render(
+    <React.StrictMode>
+        <ServiceProvider>
+            <App />
+        </ServiceProvider>
+    </React.StrictMode>
+);
+```
+
+As you can see, we used the `BrowserCurrentUserRepository`. It is using the browser's local storage and
+therefore not really suitable for testing. As you already might have noticed, it exists a `src/App.test.tsx` file,
+provided by [create-react-app](https://create-react-app.dev).
+As we learned above, the contained `<App />` in `App.test.tsx` should be bootstrapped with other services than
+implementations for the browser: Tests just run locally in the console, not in the browser.
 
 [« previous](01-setup.md) | [next »](03-routing.md)
