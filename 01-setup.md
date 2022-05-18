@@ -68,13 +68,17 @@ With unified linting rules a team can agree on the same coding style.
 This increases the code readability for each individual team member and therefore increases productivity.
 
 Luckily create-react-app comes with installed linting packages out of the box.
-I suggest integrating the linting process in your CI pipeline, or at least the automatic check of the linting rules.
-To have the choice between these two options let's add `prettier` in combination with the already installed `eslint`:
+I suggest integrating an automatic lint fixing process in your CI pipeline.
+If you don't like CI processes to push changes into your codebase,
+I suggest integrating at least the check of the linting rules.
+To be able to automatically format your code, let's add `prettier`
+which goes hand in hand with the already installed `eslint`:
 
 ```
 npm install eslint-plugin-prettier@latest --save-dev
 ```
-Now extend the `eslintConfig` in your `package.json` that this property looks like so:
+
+Just extend the `eslintConfig` in your `package.json` like so:
 ```json
 "eslintConfig": {
     "extends": [
@@ -94,8 +98,9 @@ Now extend the `eslintConfig` in your `package.json` that this property looks li
 },
 ```
 
-Finally, we need to extend the `scripts` section in the `package.json`, to easily access
-the mentioned two options from above.
+Finally, we need to extend the `scripts` section in the `package.json` to easily access
+the mentioned two options described above.
+
 ```json
 "lint": "eslint ./src --ext .ts,.tsx",
 "lint:fix": "tsc && eslint ./src --ext .ts,.tsx --quiet --fix"
