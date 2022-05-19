@@ -204,12 +204,196 @@ root.render(
 );
 ```
 
-We use the `BrowserCurrentUserRepository` in . It is using the browser's local storage and
-therefore is not suitable for testing.
+To see the result of our code just make the App file look as below and open it in the browser.
 
-As you already might have noticed, it exists a `src/App.test.tsx` file,
+```typescript
+// src/App.tsx
+
+import React, { MouseEvent, useEffect } from "react";
+import {
+    anonymousAuthUser,
+    useCurrentUser,
+    useCurrentUserRepository,
+} from "./packages/core/auth";
+
+function CurrentUserPlayground() {
+    const currentUserRepo = useCurrentUserRepository();
+    const currentUser = useCurrentUser();
+    const isLoggedIn = currentUser.type === "authenticated";
+    function loginUser(event: MouseEvent<HTMLAnchorElement>) {
+        event.preventDefault();
+        currentUserRepo.setCurrentUser({
+            type: "authenticated",
+            apiKey: "foo",
+            data: {
+                id: "foo",
+                username: "Linus",
+            },
+        });
+    }
+    function logoutUser(event: MouseEvent<HTMLAnchorElement>) {
+        event.preventDefault();
+        currentUserRepo.setCurrentUser(anonymousAuthUser);
+    }
+    return (
+        <div
+            style={{
+                marginLeft: "auto",
+                marginRight: "auto",
+                width: "600px",
+                textAlign: "center",
+            }}
+        >
+            {!isLoggedIn && (
+                <a href="#" onClick={loginUser}>
+                login
+                </a>
+            )}
+            {isLoggedIn && (
+                <a href="#" onClick={logoutUser}>
+                logout
+                </a>
+            )}
+            ::{" "}
+            {currentUser.type === "authenticated"
+                ? currentUser.data.username
+                : "Anonymous"}
+        </div>
+    );
+}
+
+function App() {
+    const currentUserRepo = useCurrentUserRepository();
+    useEffect(() => {
+        currentUserRepo.init();
+    }, []);
+    return <CurrentUserPlayground />;
+}
+
+export default App;
+```
+You should be able to change the current user's state by clicking the "login" and "logout" links.
+The current user should not change after a page refresh, because the repository stores it at
+the browser's local storage and queries this state on first mount of the App component
+A `useEffect` hook, having an empty array as dependency does correspond to a
+`componentDidMount` hook of a class component.
+
+### 2.6 Services for the testing environment
+As you already might have noticed, it exists a `src/App.test.tsx` file which was
 provided by [create-react-app](https://create-react-app.dev).
-As we learned above, the contained `<App />` in `App.test.tsx` should be bootstrapped with other services than
-implementations for the browser: Tests just run locally in the console, not in the browser.
+As we learned above, the contained `<App />` in `App.test.tsx` should be bootstrapped with other services
+than such which are browser implementations (like `BrowserCurrentUserRepository` using the browser's local storage),
+because our tests just run locally in the console and not in the browser.
+
+So let's create a service provider for the tests with mocked services instead of browser specific implementations.
+
+```typescript
+// src/TestServiceProvider.tsx
+
+import {
+  anonymousAuthUser,
+  AuthUser,
+  CurrentUserProvider,
+  CurrentUserRepository,
+  CurrentUserRepositoryProvider,
+} from "./packages/core/auth";
+import React, { FC, PropsWithChildren, useRef } from "react";
+
+class StubCurrentUserRepository implements CurrentUserRepository {
+  setCurrentUser(currentUser: AuthUser) {}
+  init() {}
+}
+
+export const TestServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
+  const stubCurrentUserRepositoryRef = useRef(new StubCurrentUserRepository());
+  return (
+    <CurrentUserRepositoryProvider value={stubCurrentUserRepositoryRef.current}>
+      <CurrentUserProvider value={anonymousAuthUser}>
+        {props.children}
+      </CurrentUserProvider>
+    </CurrentUserRepositoryProvider>
+  );
+};
+```
+
+Continue by wrapping the `<App>` with it in the testing environment, that the file looks like so:
+
+```typescript
+// src/App.test.tsx
+
+import React from "react";
+import { render } from "@testing-library/react";
+import App from "./App";
+import { TestServiceProvider } from "./TestServiceProvider";
+
+test("renders app", () => {
+    render(
+        <TestServiceProvider>
+            <App />
+        </TestServiceProvider>
+    );
+});
+```
+You can check it by running `npm run test`.
+
+### 2.7 Ramp up our import paths
+To not always reference to our packages folder by a relative import path,
+we can alias our `packages` folder with `@packages/`.
+At the moment we have not too many imports to adjust yet, so I think it's the right time to do this.
+This one could be a bit hard for developers without knowledge about webpack, Typescript or jest.
+So let's get our hands dirty.
+
+First let's adjust our imports and replace every `import {...} from "./packages/core/auth";` with
+`import {...} from "@packages/core/auth";`. Following files are affected:
+- `src/App.tsx`
+- `src/ServiceProvider.tsx`
+- `src/TestServiceProvider.tsx`
+
+Adjust the `package.json` file by adding following section to it:
+```json
+  "jest": {
+    "moduleNameMapper": {
+      "@packages/(.*)": "<rootDir>/src/packages/$1"
+    }
+  },
+```
+This makes sure, that our [jest](https://jestjs.io/) test runner is aware of the alias.
+
+Next, append following properties in the `compilerOptions` property at the `tsconfig.json` file.
+So TS is also aware of our alias.
+```json
+"baseUrl": ".",
+"paths": {
+  "@packages/*": ["src/packages/*"]
+}
+```
+
+Now run the app with `npm run start` and switch to the browser at `localhost:3000`.
+Doh... does not seem to work yet :scream:
+![Import Alias Error](docs/02-alias-error.png "Import Alias Error")
+
+This is because [webpack](https://webpack.js.org) doesn't know anything about our alias yet.
+The webpack configuration file is located in the [create-react-app](https://create-react-app.dev) template, on which
+we have no access to.
+Damn it... time to eject our [create-react-app](https://create-react-app.dev) template came faster than I expected:
+
+Run `npm run eject` in the root of the project, type in `y` and finally, press `Enter` to confirm.
+This leaks all the configuration files of our installed [create-react-app](https://create-react-app.dev) template
+and gives us the advantage of more configuration possibilities.
+On the other hand and from now on, we need to update all the packages on our own. What a pity!
+If you look at the `package.json` file, you'll probably recognize that the list of packages became a lot bigger.
+Anyway, I think for a clean codebase it is worth it.
+
+Now, let's add the last piece to make our import alias work and add the following section in the
+`config/webpack.config.json`, so that the `alias` property is also aware of our packages:
+
+```json
+alias: {
+  '@packages': path.resolve(__dirname, '../src/packages'),
+  // other stuff...
+}
+```
+Restart the app and check the browser. Everything should work now as expected, with our `@packages` alias.
+Congratulations!
 
 [« previous](01-setup.md) | [next »](03-routing.md)
