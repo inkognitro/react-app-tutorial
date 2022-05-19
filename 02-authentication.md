@@ -388,7 +388,7 @@ Now, let's add the last piece to make our import alias work and add the followin
 
 ```js
 "alias": {
-  "@packages": path.resolve(__dirname, '../src/packages')
+  "@packages": path.resolve(__dirname, '../src/packages'),
   // other stuff...
 }
 ```
