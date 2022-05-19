@@ -10,7 +10,7 @@ Not only with testing in mind, but also in consideration of the principle of
 [low coupling and high cohesion](https://stackoverflow.com/questions/14000762/what-does-low-in-coupling-and-high-in-cohesion-mean),
 I think it makes sense to write the `auth` logic as independent as possible.
 Best case scenario would be to be able to reuse the logic for another app.
-This other app could be a smaller app for embedding some chosen contents in an iframe
+This other app could for example be a smaller app for embedding some chosen contents in an iframe
 which is rendered by an external website. Let's extract such logic into a separate `packages/` folder.
 
 Sometimes the boundary between app logic and package logic can be really opaque.
