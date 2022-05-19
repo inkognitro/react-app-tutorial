@@ -150,9 +150,9 @@ Well done! We've created our first independent package code.
 Let's use it in our app now!
 
 ### 2.5 Using the auth package
-With DI we usually need something like a service container which provides our service implementations.
-So let's create a service provider component to provide some services and states to all of its nested child components.
-These services or states can be accessed by custom hooks, like our `useCurrentUserRepository` or `useCurrentUser` hooks.
+With DI, we usually need something like a service container which provides our service implementations.
+So let's create a service provider component to provide our required services and states to all of its nested child components.
+These services or states can be accessed by custom hooks, like the `useCurrentUserRepository` or `useCurrentUser` hooks we have written.
 
 ```typescript
 // src/ServiceProvider.tsx
@@ -275,18 +275,21 @@ function App() {
 export default App;
 ```
 You should be able to change the current user's state by clicking the "login" and "logout" links.
-The current user should not change after a page refresh, because the repository stores it at
-the browser's local storage and queries this state on first mount of the App component
-A `useEffect` hook, having an empty array as dependency does correspond to a
-`componentDidMount` hook of a class component.
+The current user should not change after a page refresh. This is reached with the `CurrentUserRepository` repository
+whose implementation does store the current user at the browser's local storage.
+At the first render, the `<App>` initializes the current user by looking at the local storage first.
+
+> :bulb: A `useEffect` hook, having an empty dependency array (second parameter) does correspond to a
+> `componentDidMount` hook of a class component.
 
 ### 2.6 Services for the testing environment
-As you already might have noticed, it exists a `src/App.test.tsx` file which was
-provided by [create-react-app](https://create-react-app.dev).
-As we learned above, the contained `<App />` in `App.test.tsx` should be bootstrapped with other services
-than browser implementations, like the `BrowserCurrentUserRepository` which is using the browser's local storage.
-This is because our tests just run locally in the console and not in a browser.
-So let's create a service provider for the tests with mocked services fulfilling the services' interfaces.
+As you already might have noticed, there is a `src/App.test.tsx` file.
+As we learned before, the `<App />` in `App.test.tsx` should not be bootstrapped
+with browser service implementations like `BrowserCurrentUserRepository`.
+`BrowserCurrentUserRepository` is using the browser's local storage,
+but our tests just run locally in the console and not in a browser.
+So let's create a service provider for the testing environment which should contain
+either compatible or mocked services which are fulfilling the services' interfaces.
 
 ```typescript
 // src/TestServiceProvider.tsx
@@ -370,7 +373,9 @@ So TS is also aware of our alias.
 ```
 
 Now run the app with `npm run start` and switch to the browser at `localhost:3000`.
-Doh... does not seem to work yet :scream:
+
+D'oh... does not seem to work yet :scream
+
 ![Import Alias Error](docs/02-alias-error.png "Import Alias Error")
 
 This is because [webpack](https://webpack.js.org) doesn't know anything about our alias yet.
