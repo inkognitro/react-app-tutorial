@@ -341,7 +341,7 @@ You should be able to check it by running `npm run test`. Well done!
 To not always reference to our packages folder by a relative import path,
 we can alias our `packages` folder with `@packages/`.
 At the moment we have not too many imports to adjust yet, so I think it's the right time to do this.
-This one could be a bit hard for developers without knowledge about webpack, Typescript or jest.
+This one could be a bit hard for developers without knowledge about Webpack, Typescript or even Jest.
 So let's get our hands dirty.
 
 First let's adjust our imports and replace every `import {...} from "./packages/core/auth";` with
