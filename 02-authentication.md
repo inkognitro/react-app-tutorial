@@ -282,10 +282,9 @@ A `useEffect` hook, having an empty array as dependency does correspond to a
 As you already might have noticed, it exists a `src/App.test.tsx` file which was
 provided by [create-react-app](https://create-react-app.dev).
 As we learned above, the contained `<App />` in `App.test.tsx` should be bootstrapped with other services
-than such which are browser implementations (like `BrowserCurrentUserRepository` using the browser's local storage),
-because our tests just run locally in the console and not in the browser.
-
-So let's create a service provider for the tests with mocked services instead of browser specific implementations.
+than browser implementations, like the `BrowserCurrentUserRepository` which is using the browser's local storage.
+This is because our tests just run locally in the console and not in a browser.
+So let's create a service provider for the tests with mocked services fulfilling the services' interfaces.
 
 ```typescript
 // src/TestServiceProvider.tsx
@@ -316,7 +315,7 @@ export const TestServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
 };
 ```
 
-Continue by wrapping the `<App>` with it in the testing environment, that the file looks like so:
+We should wrap the `<App>` with it in the testing environment:
 
 ```typescript
 // src/App.test.tsx
@@ -334,7 +333,7 @@ test("renders app", () => {
     );
 });
 ```
-You can check it by running `npm run test`.
+You should be able to check it by running `npm run test`. Well done!
 
 ### 2.7 Ramp up our import paths
 To not always reference to our packages folder by a relative import path,
@@ -394,6 +393,5 @@ alias: {
 }
 ```
 Restart the app and check the browser. Everything should work now as expected, with our `@packages` alias.
-Congratulations!
 
 [« previous](01-setup.md) | [next »](03-routing.md)
