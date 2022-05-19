@@ -10,7 +10,7 @@ Nice to know: [react-router](https://reactrouter.com) does also provide a router
 
 Install it with:
 ```
-npm install --save react-router-dom
+npm install react-router-dom --save 
 ```
 
 

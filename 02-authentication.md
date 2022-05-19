@@ -44,6 +44,9 @@ export type AuthenticatedAuthUser = GenericUser<
 export type AuthUser = AnonymousAuthUser | AuthenticatedAuthUser;
 ```
 
+If we had some sort of user permissions, the `GenericUser` would be the right type definition to place them.
+For now, we keep it simple.
+
 ### 2.3 DI, types and interfaces
 We should never reference a service directly by its implementation,
 otherwise you won't be able to properly test your components or other code you've written.
