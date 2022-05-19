@@ -1,5 +1,7 @@
 [![BadgeMITLicense: MIT](./docs/MIT.svg)](LICENSE)
 
+!!! WORK IN PROGRESS !!!
+
 # react-app-tutorial
 The purpose of this tutorial is to better understand the concepts of React and to build a framework on top of it.
 To go through this tutorial without a lot of pain, you should be familiar with Javascript ES6+, React and JSX.
