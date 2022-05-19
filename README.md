@@ -26,25 +26,32 @@ Below you can see an overview of all steps of this tutorial.
 3. [Authentication](02-authentication.md) - Authentication context for the current user
 2. [Routing](03-routing.md) - Prepare page layouts and the page's skeletons
 
+> :bulb: To compare the code changes between the tutorial steps,
+> just go to https://github.com/inkognitro/react-app-tutorial-code/compare and choose the specific tutorial step
+> branches to compare. Some steps are split into smaller branches.
+> Every step is an accumulation of all the steps before plus the code changes of the tutorial step.
+
 [Let's start »](01-setup.md)
 
-### Tutorial steps
-1. Setup react app from scratch
+## Planned Tutorial steps for now
+This will probably change during the creation of the tutorial.
+
+1. Setup react app from scratch (**done**)
    - installation with create-react-app
    - code structure (packages/core, spa) and the "whys" (take explanations from coding guidelines)
    - install material ui
+3. Auth (**done**)
+   - define current user types
+   - define `useCurrentUser` hook
+   - define `CurrentUserRepository` and its hook
+   - adjust navigation (add username when current user is logged in)
+2. Routing (**in progress**)
    - install styled-components (reference VueJs strategy)
-2. Pages skeletons
    - routing with react-router-dom
    - page layout
    - navigation
    - index page
    - register user page
-3. CurrentUser
-   - define current user types
-   - define `useCurrentUser` hook
-   - define `CurrentUserRepository` and its hook
-   - adjust navigation (add username when current user is logged in)
 4. Translator (i18n)
    - setup translation with `i18next`
    - `useTranslator` hook
