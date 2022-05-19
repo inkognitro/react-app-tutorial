@@ -342,7 +342,7 @@ You should be able to check it by running `npm run test`. Well done!
 
 ### 2.7 Ramp up our import paths
 To not always reference to our packages folder by a relative import path,
-we can alias our `packages` folder with `@packages/`.
+we can alias our `packages` folder with `@packages`.
 At the moment we have not too many imports to adjust yet, so I think it's the right time to do this.
 This one could be a bit hard for developers without knowledge about Webpack, Typescript or even Jest.
 So let's get our hands dirty.
@@ -374,7 +374,7 @@ So TS is also aware of our alias.
 
 Now run the app with `npm run start` and switch to the browser at `localhost:3000`.
 
-D'oh... does not seem to work yet :scream
+D'oh... does not seem to work yet :scream:
 
 ![Import Alias Error](docs/02-alias-error.png "Import Alias Error")
 
