@@ -6,7 +6,7 @@
 !!! WORK IN PROGRESS !!!
 
 # react-app-tutorial
-The purpose of this tutorial is to serve a better understanding of the concepts of React and to know which libraries
+The purpose of this tutorial is to serve for a better understanding of the concepts of React and to know which libraries
 are state of the art to handle daily frontend stuff.
 To go through this tutorial without a lot of pain, you should be familiar with Javascript ES6+, React and JSX.
 This tutorial is written in Typescript, but I think most people who understand Javascript can also learn
