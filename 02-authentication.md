@@ -384,11 +384,11 @@ If you look at the `package.json` file, you'll probably recognize that the list 
 Anyway, I think for a clean codebase it is worth it.
 
 Now, let's add the last piece to make our import alias work and add the following section in the
-`config/webpack.config.json`, so that the `alias` property is also aware of our packages:
+`config/webpack.config.js`, so that the `alias` property is also aware of our packages:
 
-```json
+```js
 "alias": {
-  '@packages': path.resolve(__dirname, '../src/packages')
+  "@packages": path.resolve(__dirname, '../src/packages')
   // other stuff...
 }
 ```
