@@ -387,8 +387,8 @@ Now, let's add the last piece to make our import alias work and add the followin
 `config/webpack.config.json`, so that the `alias` property is also aware of our packages:
 
 ```json
-alias: {
-  '@packages': path.resolve(__dirname, '../src/packages'),
+"alias": {
+  '@packages': path.resolve(__dirname, '../src/packages')
   // other stuff...
 }
 ```
