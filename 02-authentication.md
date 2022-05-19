@@ -60,6 +60,7 @@ After we defined the type `AuthUser` for a website visitor, we need a custom `us
 to reach the current user in every component no matter how nested it is.
 We also need a repository (a service) to keep the current user after a page refresh has been done.
 We should be able to mock/stub this service for testing purposes.
+Let's try to write these requirements down in form of code:
 
 ```typescript
 // src/packages/core/auth/currentUser.ts
@@ -140,6 +141,7 @@ So to properly finalize our `auth` package we also add this clue code.
 
 ```typescript
 // src/packages/core/auth/currentUserRepository.ts
+
 export * from "./authUser";
 export * from "./currentUser";
 export * from "./currentUserRepository";
