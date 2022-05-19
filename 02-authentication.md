@@ -140,7 +140,7 @@ In Node, it is usual to provide a package's public API by an index file.
 So to properly finalize our `auth` package we also add this clue code.
 
 ```typescript
-// src/packages/core/auth/currentUserRepository.ts
+// src/packages/core/auth/index.ts
 
 export * from "./authUser";
 export * from "./currentUser";
