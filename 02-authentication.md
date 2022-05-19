@@ -248,12 +248,12 @@ function CurrentUserPlayground() {
         >
             {!isLoggedIn && (
                 <a href="#" onClick={loginUser}>
-                login
+                    login
                 </a>
             )}
             {isLoggedIn && (
                 <a href="#" onClick={logoutUser}>
-                logout
+                    logout
                 </a>
             )}
             ::{" "}
@@ -399,6 +399,6 @@ Now, let's add the last piece to make our import alias work and add the followin
   // other stuff...
 }
 ```
-Restart the app and check the browser. Everything should work now as expected, with our `@packages` alias.
+Restart the app and check the browser. Everything should work as expected now, including our `@packages` alias.
 
 [« previous](01-setup.md) | [next »](03-routing.md)
