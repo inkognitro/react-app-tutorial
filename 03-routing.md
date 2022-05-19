@@ -1,8 +1,9 @@
 [« previous](02-authentication.md) | [next »](04-foo.md)
 
 ## 3. Routing 
-Within this chapter we go through page layouts, routing stuff.
-We are also going to use some material ui components.
+Within this chapter we go through routing stuff.
+Furthermore, we are going to install [MUI](https://mui.com) and use some [MUI](https://mui.com) components
+for our own page layout components.
 
 ### 3.1 Add two more aliases
 First, we should create two more aliases:

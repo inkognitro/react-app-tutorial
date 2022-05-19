@@ -1,9 +1,13 @@
 [![BadgeMITLicense: MIT](./docs/MIT.svg)](LICENSE)
 
+> Special thanks go to **easylearn schweiz ag**. This is the company I actually work for.
+> Our managers allowed me to create parts of this tutorial at working time :heart:
+
 !!! WORK IN PROGRESS !!!
 
 # react-app-tutorial
-The purpose of this tutorial is to better understand the concepts of React and to build a framework on top of it.
+The purpose of this tutorial is to serve a better understanding of the concepts of React and to know which libraries
+are state of the art to handle daily frontend stuff.
 To go through this tutorial without a lot of pain, you should be familiar with Javascript ES6+, React and JSX.
 This tutorial is written in Typescript, but I think most people who understand Javascript can also learn
 Typescript by doing this tutorial. No need to panic: It is just "javascript with type hints".
