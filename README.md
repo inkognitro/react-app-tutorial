@@ -1,7 +1,7 @@
 [![BadgeMITLicense: MIT](./docs/MIT.svg)](LICENSE)
 
-> Special thanks go to [easylearn schweiz ag](https://easylearn.ch). This is the company I actually work for.
-> Our managers allowed me to create parts of this tutorial at working time :heart:
+> Special thanks go to [easylearn schweiz ag](https://easylearn.ch). This is the company I currently work for.
+> Our managers allowed me to create parts of this tutorial at working time.
 
 !!! WORK IN PROGRESS !!!
 
