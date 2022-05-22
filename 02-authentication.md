@@ -209,7 +209,8 @@ root.render(
 );
 ```
 
-To see the result of our code just make the App file look as below and open it in the browser.
+To see the result of our code, just make sure the `src/App.tsx` looks as below. Then, open your browser at
+[localhost:3000](http://localhost:3000).
 
 ```typescript
 // src/App.tsx
@@ -278,9 +279,9 @@ function App() {
 export default App;
 ```
 You should be able to change the current user's state by clicking the "login" and "logout" links.
-The current user should not change after a page refresh. This is reached with the `CurrentUserRepository` repository
-whose implementation does store the current user at the browser's local storage.
-At the first render, the `<App>` initializes the current user by looking at the local storage first.
+The current user should not change after a page refresh. This is reached with `CurrentUserRepository`
+whose implementation stores the current user in the browser's local storage.
+The `<App>` initializes the current user by looking at the local storage at first render.
 
 > :bulb: A `useEffect` hook, having an empty dependency array (second parameter) does correspond to a
 > `componentDidMount` hook of a class component.
