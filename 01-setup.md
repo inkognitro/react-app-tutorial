@@ -116,4 +116,10 @@ Once, I forgot to implement this check, and I did run the `lint:fix` script.
 The result was, that the script totally messed up my code base.
 Luckily I hadn't committed yet. With this check you are save, or at least a bit more :innocent:
 
+> :bulb: As a Windows user you could face errors in your IDE after you did a `git commit`.
+> This is because `git commit` automatically replaces `CRLF` (Windows) with `LF` (Unix).
+> You can fix that by running `lint:fix` after every commit but this would be really annoying.
+> It's easier to change the end-of-line style of your code editor to `LF`
+> (e.g. [see WebStorm docs](https://www.jetbrains.com/help/webstorm/configuring-line-endings-and-line-separators.html)).
+
 [« introduction](README.md) | [next »](02-authentication.md)
