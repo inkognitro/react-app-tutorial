@@ -198,10 +198,10 @@ export const NavBarPage: FC<NavBarPageProps> = (props) => {
 ```
 
 ### 3.5 Create the page components 
-Before we create some routes we need to prepare its target.
-So let's create our page components' skeletons.
+Before we create some routes we need to prepare route targets.
+So let's create the page components of this tutorial.
 
-The index or home page:
+The index page:
 ```typescript
 // src/pages/IndexPage.tsx
 
@@ -213,7 +213,7 @@ export const IndexPage: FC = () => {
 };
 ```
 
-The `RegisterPage`, to register a user:
+The `RegisterPage`, within we are going to build the user registration form:
 ```typescript
 // src/pages/auth/Register.tsx
 
@@ -225,7 +225,7 @@ export const RegisterPage: FC = () => {
 };
 ```
 
-A `MySettingsPage` to demonstrate what happens if the user is not logged in:
+A `MySettingsPage` to demonstrate what happens if the user logs out while being on this page:
 ```typescript
 // src/pages/user-management/MySettingsPage.tsx
 
@@ -240,8 +240,8 @@ export const MySettingsPage: FC = () => {
 And finally, a `NotFoundPage`. Keep in mind that the server only sends the `index.html`
 and the bundled app in form of a `.js` file.
 So you won't be able to send a 404 status code from the server side,
-until you do server side rendering or at least a server side check before sending the http header to the client.
-There are ways to achieve this, but this requires a server side script, and we don't cover this here.
+until you do server side rendering, or at least a server side check before sending the http header to the client.
+There are ways to achieve this, but this requires a server side script, which we do not cover here.
 ```typescript
 // src/pages/NotFoundPage.tsx
 
@@ -258,8 +258,7 @@ We still have no routing entry point.
 As we've learned in the chapters before, not only we have to find a way to support routing in the browser
 but also for the testing environment. So let's implement the specific routing in the right parts of our code.
 
-Let's first wrap our `<App>` with the `<BrowserRouter>` in the entry point which belongs to the browser environment,
-so that the file looks like so:
+Let's first wrap our `<App>` with the `<BrowserRouter>` within the service provider for the browser environment:
 ```typescript
 // src/ServiceProvider.tsx
 
@@ -294,8 +293,8 @@ export const ServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
 };
 ```
 
-The same applies to the testing environment.
-Luckily react-router-dom does provide the `MemoryRouter` for that:
+The same applies to the testing environment's service provider but with another implementation.
+Luckily react-router-dom provides the `MemoryRouter` for us:
 ```typescript
 // src/TestServiceProvider.tsx
 
@@ -334,8 +333,8 @@ export const TestServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
 };
 ```
 
-Finally, we are going to define our routes within the `<App>` component and delete the other stuff
-we have extracted to our page template, so that the `App.tsx` looks like below:
+Finally, we are going to define our routes within the `<App>` component. Just delete the other stuff
+we have extracted to our `<NavBarPage>` component, so that the `App.tsx` looks like below:
 ```typescript
 // src/App.tsx
 
@@ -371,12 +370,12 @@ function App() {
 export default App;
 ```
 
-Nice one! You now should be able to go to different routes in the app.
+Nice one! You should now be able to go to different routes in the app.
 At [localhost:3000/foo](http://localhost:3000/foo) you should see the `NotFoundPage`.
 This page should also appear, when you log in, switch to [localhost:3000/user-management/my-settings](http://localhost:3000/user-management/my-settings),
 and then do a logout.
 
-Also execute `npm run test` in your console and see if your test still passes.
+Also execute `npm run test` in your console and see if your test passes.
 Otherwise, have a look at the [03-routing-1 branch](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
 to compare with yours.
 
