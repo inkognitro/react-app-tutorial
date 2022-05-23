@@ -178,7 +178,7 @@ export const ServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
     );
 };
 ```
-We should wrap our app directly in the entry point which is responsible to bootstraps the app in the browser,
+We should wrap our app directly in the entry point which is responsible to bootstrap the app in the browser,
 because this service provider bootstraps the service implementations for browser environments
 (e.g. see `BrowserCurrentUserRepository`).
 So let's extend the given `index.tsx` with our created service provider
