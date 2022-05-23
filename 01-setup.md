@@ -97,7 +97,7 @@ Just extend the `eslintConfig` in your `package.json` like so:
     }
 },
 ```
-Furthermore, we can adjust our prettier settings, so let's do this by adding a `.prettierrc.js` file:
+Let's adjust our prettier settings a bit by adding a `.prettierrc.js` file:
 ```js
 // .prettierrc.js
 
