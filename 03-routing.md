@@ -49,7 +49,7 @@ export * from './config';
 However, this context needs to be integrated as well.
 Add a new context reference to `src/ServiceProvider.tsx` and `src/TestServiceProvider.tsx`.
 This can be done with the `React.useRef` hook.
-This makes sure, that the context is initialized at the first render of the component.
+This makes sure, that the context is initialized only at the first render of the component.
 
 ```typescript
 import { Config, ConfigProvider } from '@packages/core/config';
@@ -197,11 +197,188 @@ export const NavBarPage: FC<NavBarPageProps> = (props) => {
 };
 ```
 
-### 3.5 Create the page components
+### 3.5 Create the page components 
+Before we create some routes we need to prepare its target.
+So let's create our page components' skeletons.
 
+The index or home page:
+```typescript
+// src/pages/IndexPage.tsx
 
-### 3.6 Time to wire our page components
+import { FC } from 'react';
+import { NavBarPage } from '@components/page-layout';
 
+export const IndexPage: FC = () => {
+    return <NavBarPage title="Home">Home.</NavBarPage>;
+};
+```
+
+The `RegisterPage`, to register a user:
+```typescript
+// src/pages/auth/Register.tsx
+
+import { FC } from 'react';
+import { NavBarPage } from '@components/page-layout';
+
+export const RegisterPage: FC = () => {
+    return <NavBarPage title="Register">Register.</NavBarPage>;
+};
+```
+
+A `MySettingsPage` to demonstrate what happens if the user is not logged in:
+```typescript
+// src/pages/user-management/MySettingsPage.tsx
+
+import { FC } from 'react';
+import { NavBarPage } from '@components/page-layout';
+
+export const MySettingsPage: FC = () => {
+    return <NavBarPage title="My settings">My settings.</NavBarPage>;
+};
+```
+
+And finally, a `NotFoundPage`. Keep in mind that the server only sends the `index.html`
+and the bundled app in form of a `.js` file.
+So you won't be able to send a 404 status code from the server side,
+until you do server side rendering or at least a server side check before sending the http header to the client.
+There are ways to achieve this, but this requires a server side script, and we don't cover this here.
+```typescript
+// src/pages/NotFoundPage.tsx
+
+import { FC } from 'react';
+import { NavBarPage } from '@components/page-layout';
+
+export const NotFoundPage: FC = () => {
+    return <NavBarPage title="Not Found">Not Found.</NavBarPage>;
+};
+```
+
+### 3.6 Time to wire the parts together
+We still have no routing entry point.
+As we've learned in the chapters before, not only we have to find a way to support routing in the browser
+but also for the testing environment. So let's implement the specific routing in the right parts of our code.
+
+Let's first wrap our `<App>` with the `<BrowserRouter>` in the entry point which belongs to the browser environment,
+so that the file looks like so:
+```typescript
+// src/ServiceProvider.tsx
+
+import React, { FC, PropsWithChildren, useRef, useState } from 'react';
+import {
+    anonymousAuthUser,
+    AuthUser,
+    BrowserCurrentUserRepository,
+    CurrentUserProvider,
+    CurrentUserRepositoryProvider,
+} from '@packages/core/auth';
+import { Config, ConfigProvider } from '@packages/core/config';
+import { BrowserRouter } from 'react-router-dom';
+
+export const ServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
+    const [currentUserState, setCurrentUserState] = useState<AuthUser>(anonymousAuthUser);
+    const browserCurrentUserRepositoryRef = useRef(new BrowserCurrentUserRepository(setCurrentUserState));
+    const configRef = useRef<Config>({
+        companyName: 'ACME',
+    });
+    return (
+        <BrowserRouter>
+            <ConfigProvider value={configRef.current}>
+                <CurrentUserRepositoryProvider value={browserCurrentUserRepositoryRef.current}>
+                    <CurrentUserProvider value={currentUserState}>
+                        {props.children}
+                    </CurrentUserProvider>
+                </CurrentUserRepositoryProvider>
+            </ConfigProvider>
+        </BrowserRouter>
+    );
+};
+```
+
+The same applies to the testing environment.
+Luckily react-router-dom does provide the `MemoryRouter` for that:
+```typescript
+// src/TestServiceProvider.tsx
+
+import {
+    anonymousAuthUser,
+    AuthUser,
+    CurrentUserProvider,
+    CurrentUserRepository,
+    CurrentUserRepositoryProvider,
+} from '@packages/core/auth';
+import React, { FC, PropsWithChildren, useRef } from 'react';
+import { Config, ConfigProvider } from '@packages/core/config';
+import { MemoryRouter } from 'react-router-dom';
+
+class StubCurrentUserRepository implements CurrentUserRepository {
+    setCurrentUser(currentUser: AuthUser) {}
+    init() {}
+}
+
+export const TestServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
+    const stubCurrentUserRepositoryRef = useRef(new StubCurrentUserRepository());
+    const configRef = useRef<Config>({
+        companyName: 'ACME',
+    });
+    return (
+        <MemoryRouter>
+            <ConfigProvider value={configRef.current}>
+                <CurrentUserRepositoryProvider value={stubCurrentUserRepositoryRef.current}>
+                    <CurrentUserProvider value={anonymousAuthUser}>
+                        {props.children}
+                    </CurrentUserProvider>
+                </CurrentUserRepositoryProvider>
+            </ConfigProvider>
+        </MemoryRouter>
+    );
+};
+```
+
+Finally, we are going to define our routes within the `<App>` component and delete the other stuff
+we have extracted to our page template, so that the `App.tsx` looks like below:
+```typescript
+// src/App.tsx
+
+import React, { useEffect } from 'react';
+import { useCurrentUser, useCurrentUserRepository } from '@packages/core/auth';
+import { Route, Routes } from 'react-router-dom';
+import { IndexPage } from '@pages/IndexPage';
+import { RegisterPage } from '@pages/auth/RegisterPage';
+import { MySettingsPage } from '@pages/user-management/MySettingsPage';
+import { NotFoundPage } from '@pages/NotFoundPage';
+
+function AppRoutes() {
+    const currentUser = useCurrentUser();
+    const isUserLoggedIn = currentUser.type === 'authenticated';
+    return (
+        <Routes>
+            <Route path="/" element={<IndexPage />} />
+            <Route path="/auth/register" element={<RegisterPage />} />
+            {isUserLoggedIn && <Route path="/user-management/my-settings" element={<MySettingsPage />} />}
+            <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+    );
+}
+
+function App() {
+    const currentUserRepo = useCurrentUserRepository();
+    useEffect(() => {
+        currentUserRepo.init();
+    }, []);
+    return <AppRoutes />;
+}
+
+export default App;
+```
+
+Nice one! You now should be able to go to different routes in the app.
+At [localhost:3000/foo](http://localhost:3000/foo) you should see the `NotFoundPage`.
+This page should also appear, when you log in, switch to [localhost:3000/user-management/my-settings](http://localhost:3000/user-management/my-settings),
+and then do a logout.
+
+Also execute `npm run test` in your console and see if your test still passes.
+Otherwise, have a look at the [03-routing-1 branch](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
+to compare with yours.
 
 ### 3.x Adding styled-components
 To enable the usage of CSS in our components, let's install the [styled-components](https://styled-components.com) library.
