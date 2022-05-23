@@ -33,14 +33,13 @@ So let's add following files to the codebase:
 ```typescript
 // src/packages/core/auth/authUser.ts
 
-type AuthUserType = "anonymous" | "authenticated";
-type GenericUser<T extends AuthUserType, Payload extends object = {}> = { type: T } & Payload;
+type AuthUserType = 'anonymous' | 'authenticated';
+type GenericUser<T extends AuthUserType, Payload extends object = {}> = {
+    type: T;
+} & Payload;
 type UserData = { id: string; username: string };
-export type AnonymousAuthUser = GenericUser<"anonymous">;
-export type AuthenticatedAuthUser = GenericUser<
-    "authenticated",
-    { apiKey: string; data: UserData }
->;
+export type AnonymousAuthUser = GenericUser<'anonymous'>;
+export type AuthenticatedAuthUser = GenericUser<'authenticated', { apiKey: string; data: UserData }>;
 export type AuthUser = AnonymousAuthUser | AuthenticatedAuthUser;
 ```
 
@@ -68,14 +67,14 @@ Let's try to write these requirements down in form of code:
 ```typescript
 // src/packages/core/auth/currentUser.ts
 
-import { AnonymousAuthUser, AuthUser } from "./authUser";
-import { createContext, useContext } from "react";
+import { AnonymousAuthUser, AuthUser } from './authUser';
+import { createContext, useContext } from 'react';
 
 const currentUserContext = createContext<null | AuthUser>(null);
 
 export const CurrentUserProvider = currentUserContext.Provider;
 
-export const anonymousAuthUser: AnonymousAuthUser = { type: "anonymous" };
+export const anonymousAuthUser: AnonymousAuthUser = { type: 'anonymous' };
 
 export function useCurrentUser(): AuthUser {
     const currentUser = useContext(currentUserContext);
@@ -90,9 +89,9 @@ and
 ```typescript
 // src/packages/core/auth/currentUserRepository.ts
 
-import { createContext, useContext } from "react";
-import { AuthUser } from "./authUser";
-import { anonymousAuthUser } from "./currentUser";
+import { createContext, useContext } from 'react';
+import { AuthUser } from './authUser';
+import { anonymousAuthUser } from './currentUser';
 
 export type CurrentUserRepository = {
     setCurrentUser(currentUser: AuthUser): void;
@@ -110,15 +109,15 @@ export class BrowserCurrentUserRepository implements CurrentUserRepository {
 
     setCurrentUser(currentUser: AuthUser) {
         this.setCurrentUserState(currentUser);
-        if (currentUser.type === "anonymous") {
-            localStorage.removeItem("currentUser");
+        if (currentUser.type === 'anonymous') {
+            localStorage.removeItem('currentUser');
             return;
         }
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
     }
 
     init() {
-        const currentUserStr = localStorage.getItem("currentUser");
+        const currentUserStr = localStorage.getItem('currentUser');
         if (!currentUserStr) {
             this.setCurrentUser(anonymousAuthUser);
             return;
@@ -145,9 +144,9 @@ So to properly finalize our `auth` package we also add this clue code.
 ```typescript
 // src/packages/core/auth/index.ts
 
-export * from "./authUser";
-export * from "./currentUser";
-export * from "./currentUserRepository";
+export * from './authUser';
+export * from './currentUser';
+export * from './currentUserRepository';
 ```
 Well done! We've created our first independent package code.
 Let's use it in our app now!
@@ -160,25 +159,21 @@ These services or states can be accessed by custom hooks, like the `useCurrentUs
 ```typescript
 // src/ServiceProvider.tsx
 
-import React, { FC, PropsWithChildren, useRef, useState } from "react";
+import React, { FC, PropsWithChildren, useRef, useState } from 'react';
 import {
     anonymousAuthUser,
     AuthUser,
     BrowserCurrentUserRepository,
     CurrentUserProvider,
     CurrentUserRepositoryProvider,
-} from "./packages/core/auth";
+} from './packages/core/auth';
 
-export const ServiceProvider: FC<PropsWithChildren<{}>> = props => {
-    const [currentUserState, setCurrentUserState] = useState<AuthUser>(anonymousAuthUser); // triggers a rerender on change
-    const browserCurrentUserRepositoryRef = useRef(
-        new BrowserCurrentUserRepository(setCurrentUserState)
-    );
+export const ServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
+    const [currentUserState, setCurrentUserState] = useState<AuthUser>(anonymousAuthUser);
+    const browserCurrentUserRepositoryRef = useRef(new BrowserCurrentUserRepository(setCurrentUserState));
     return (
         <CurrentUserRepositoryProvider value={browserCurrentUserRepositoryRef.current}>
-            <CurrentUserProvider value={currentUserState}>
-                {props.children}
-            </CurrentUserProvider> 
+            <CurrentUserProvider value={currentUserState}>{props.children}</CurrentUserProvider>
         </CurrentUserRepositoryProvider>
     );
 };
@@ -192,14 +187,12 @@ and make sure that the `<App>` component is wrapped with it.
 ```typescript
 // src/index.tsx
 
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { ServiceProvider } from "./ServiceProvider";
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { ServiceProvider } from './ServiceProvider';
 
-const root = ReactDOM.createRoot(
-    document.getElementById("root") as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
     <React.StrictMode>
         <ServiceProvider>
@@ -215,25 +208,21 @@ To see the result of our code, just make sure the `src/App.tsx` looks as below. 
 ```typescript
 // src/App.tsx
 
-import React, { MouseEvent, useEffect } from "react";
-import {
-    anonymousAuthUser,
-    useCurrentUser,
-    useCurrentUserRepository,
-} from "./packages/core/auth";
+import React, { MouseEvent, useEffect } from 'react';
+import { anonymousAuthUser, useCurrentUser, useCurrentUserRepository } from './packages/core/auth';
 
 function CurrentUserPlayground() {
     const currentUserRepo = useCurrentUserRepository();
     const currentUser = useCurrentUser();
-    const isLoggedIn = currentUser.type === "authenticated";
+    const isLoggedIn = currentUser.type === 'authenticated';
     function loginUser(event: MouseEvent<HTMLAnchorElement>) {
         event.preventDefault();
         currentUserRepo.setCurrentUser({
-            type: "authenticated",
-            apiKey: "foo",
+            type: 'authenticated',
+            apiKey: 'foo',
             data: {
-                id: "foo",
-                username: "Linus",
+                id: 'foo',
+                username: 'Linus',
             },
         });
     }
@@ -242,14 +231,15 @@ function CurrentUserPlayground() {
         currentUserRepo.setCurrentUser(anonymousAuthUser);
     }
     return (
-        <div
-            style={{
-                marginLeft: "auto",
-                marginRight: "auto",
-                width: "600px",
-                textAlign: "center",
-            }}
-        >
+        <div className="App">
+            <div
+                style={{
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    width: '600px',
+                    textAlign: 'center',
+                }}
+            >
             {!isLoggedIn && (
                 <a href="#" onClick={loginUser}>
                     login
@@ -260,10 +250,8 @@ function CurrentUserPlayground() {
                     logout
                 </a>
             )}
-            ::{" "}
-            {currentUser.type === "authenticated"
-                ? currentUser.data.username
-                : "Anonymous"}
+                :: {currentUser.type === 'authenticated' ? currentUser.data.username : 'Anonymous'}
+            </div>
         </div>
     );
 }
@@ -299,28 +287,26 @@ either compatible or mocked services which are fulfilling the services' interfac
 // src/TestServiceProvider.tsx
 
 import {
-  anonymousAuthUser,
-  AuthUser,
-  CurrentUserProvider,
-  CurrentUserRepository,
-  CurrentUserRepositoryProvider,
-} from "./packages/core/auth";
-import React, { FC, PropsWithChildren, useRef } from "react";
+    anonymousAuthUser,
+    AuthUser,
+    CurrentUserProvider,
+    CurrentUserRepository,
+    CurrentUserRepositoryProvider,
+} from './packages/core/auth';
+import React, { FC, PropsWithChildren, useRef } from 'react';
 
 class StubCurrentUserRepository implements CurrentUserRepository {
-  setCurrentUser(currentUser: AuthUser) {}
-  init() {}
+    setCurrentUser(currentUser: AuthUser) {}
+    init() {}
 }
 
 export const TestServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
-  const stubCurrentUserRepositoryRef = useRef(new StubCurrentUserRepository());
-  return (
-    <CurrentUserRepositoryProvider value={stubCurrentUserRepositoryRef.current}>
-      <CurrentUserProvider value={anonymousAuthUser}>
-        {props.children}
-      </CurrentUserProvider>
-    </CurrentUserRepositoryProvider>
-  );
+    const stubCurrentUserRepositoryRef = useRef(new StubCurrentUserRepository());
+    return (
+        <CurrentUserRepositoryProvider value={stubCurrentUserRepositoryRef.current}>
+            <CurrentUserProvider value={anonymousAuthUser}>{props.children}</CurrentUserProvider>
+        </CurrentUserRepositoryProvider>
+    );
 };
 ```
 
@@ -329,12 +315,12 @@ We should wrap the `<App>` with it in the testing environment:
 ```typescript
 // src/App.test.tsx
 
-import React from "react";
-import { render } from "@testing-library/react";
-import App from "./App";
-import { TestServiceProvider } from "./TestServiceProvider";
+import React from 'react';
+import { render } from '@testing-library/react';
+import App from './App';
+import { TestServiceProvider } from './TestServiceProvider';
 
-test("renders app", () => {
+test('renders app', () => {
     render(
         <TestServiceProvider>
             <App />

@@ -7,7 +7,7 @@ Within this chapter we go through routing stuff and create the page layout base.
 First, we should create two more aliases:
 A `@components` alias for the new `src/component/` folder where our general app specific components live in,
 and a `@pages` alias for the new `src/pages` folder where our page components will be defined.
-The procedure is the same as described in [`2.7 Ramp up our import paths`](02-authentication.md).
+The procedure is the same as described in [`2.7 Ramp up our import paths`](02-authentication.md#27-ramp-up-our-import-paths).
 I am sure you can manage to get that done on your own :sunglasses:
 
 ### 3.2 Routing to page components
