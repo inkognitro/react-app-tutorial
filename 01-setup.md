@@ -97,6 +97,27 @@ Just extend the `eslintConfig` in your `package.json` like so:
     }
 },
 ```
+Furthermore, we can adjust our prettier settings, so let's do this by adding a `.prettierrc.js` file:
+```js
+// .prettierrc.js
+
+module.exports = {
+    arrowParens: 'always',
+    bracketSpacing: true,
+    jsxBracketSameLine: true,
+    jsxSingleQuote: false,
+    printWidth: 120,
+    quoteProps: 'as-needed',
+    rangeStart: 0,
+    rangeEnd: Infinity,
+    semi: true,
+    singleQuote: true,
+    tabWidth: 4,
+    trailingComma: 'es5',
+    useTabs: false,
+    endOfLine: "lf",
+};
+```
 
 Finally, we need to extend the `scripts` section in the `package.json` to easily access
 the mentioned two options described above.
