@@ -131,13 +131,13 @@ You should now be able to test the linting by running `npm run lint` in your con
 This prints the result of what needs to be corrected if some code does not correspond with the linting rules.
 If you run `npm run lint:fix`, the code style is going to be automatically fixed when possible.
 
+> :bulb: To make your life easier, make sure your IDE applies the lint fixes after file savings.
+
 Did you notice the `tsc &&` at the start of the `lint:fix` script?
 This is to prevent from automatic lint fixes when type errors still exist.
 Once, I forgot to implement this check, and I did run the `lint:fix` script.
 The result was, that the script totally messed up my code base.
 Luckily I hadn't committed yet. With this check you are save, or at least a bit more :innocent:
-
-> :bulb: To make your life easier, make sure your IDE applies the lint fixes after file savings.
 
 > :bulb: As a Windows user you could face errors in your IDE after you did a `git commit`.
 > This is because `git commit` automatically replaces `CRLF` (Windows) with `LF` (Unix).
