@@ -27,7 +27,7 @@ npx create-react-app my-project --template typescript
 This one might take a few minutes.
 
 As soon as the installation process is finished, you can test if everything works as expected by starting the app.
-To start the app you open the `package.json` and execute the `start` script by clicking the green "play" button.
+To start the app you could open the `package.json` and execute the `start` script by clicking the green "play" button.
 Alternatively you can execute the script with `npm start` directly from your console (`cd my-project`, `npm start`).
 
 Now you should be able to see the following content in your browser at `localhost:3000`:
