@@ -1,4 +1,4 @@
-[« previous](02-authentication.md) | [next »](04-foo.md)
+[« previous](02-authentication.md) | [next »](04-i18n.md)
 
 ## 3. Routing 
 Within this chapter we go through routing stuff and create the page layout base.
@@ -638,4 +638,4 @@ export const NavBarPage: FC<NavBarPageProps> = (props) => {
 
 Well done! I think it's time to have a look at translating things in the next chapter.
 
-[« previous](02-authentication.md) | [next »](04-foo.md)
+[« previous](02-authentication.md) | [next »](04-i18n.md)
