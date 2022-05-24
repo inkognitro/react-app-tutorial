@@ -27,8 +27,8 @@ For global and non steadily changed state I would suggest using the React's `use
 Below you can see an overview of all steps of this tutorial.
 
 1. [Setup from scratch](01-setup.md) - Installation: create-react-app, linting
-3. [Authentication](02-authentication.md) - Authentication context for the current user, import paths
-2. [Routing](03-routing.md) - Prepare page layouts and the page's skeletons, mui
+2. [Authentication](02-authentication.md) - Authentication context for the current user, import paths
+3. [Routing](03-routing.md) - Prepare page layouts and the page's skeletons, mui
 
 > :bulb: To compare the code changes between the tutorial steps,
 > just go to https://github.com/inkognitro/react-app-tutorial-code/compare and choose the specific tutorial step
@@ -51,14 +51,14 @@ This will probably change during the creation of the tutorial.
    - define `useCurrentUser` hook
    - define `CurrentUserRepository` and its hook
    - adjust navigation (add username when current user is logged in)
-3. Routing (**in progress**)
+3. Routing (**done**)
    - routing with react-router-dom
    - install material ui
    - page layout
    - navigation
    - index page
    - register user page
-4. Translator (i18n)
+4. Translator, i18n (**in progress**)
    - setup translation with `i18next`
    - `useTranslator` hook
    - `Translation` component with `ReactNode` placeholders
