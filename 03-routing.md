@@ -379,17 +379,45 @@ Also execute `npm run test` in your console and see if your test passes.
 Otherwise, have a look at the [03-routing-1 branch](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
 to compare with yours.
 
-### 3.x Adding styled-components
-To enable the usage of CSS in our components, let's install the [styled-components](https://styled-components.com) library.
+### 3.7 Next design level with MUI
+There's no need to reinvent the wheel over and over again by creating everything from scratch.
+[Material UI (MUI)](https://mui.com/) offers a huge set of components which are easy to customize and well tested.
+It's the preferred framework these days for most developers. It's compatibility with React makes it a perfect fit for us.
+Add the library and the MUI icons with:
 
 ```
-npm install styled-components --save
+npm install @mui/material @mui/icons-material --save
 ```
 
-We also need to install the TS types for it, because the library does not support TS by default.
+Material UI comes with the emotion library by default for adding custom css.
+To be able to solve more complex styling issues,
+I suggest going with [styled-components](https://styled-components.com/) instead.
+To get a clue about the comparison of these two libraries have a look at
+[this LogRocket article](https://blog.logrocket.com/styled-components-vs-emotion-for-handling-css/).
+With [MUI](https://mui.com/) we need to switch its styled-engine to [styled-components](https://styled-components.com/).
+
+Install the styled-components library and its [MUI](https://mui.com/) styled-engine.
+```
+npm install @mui/styled-engine-sc styled-components --save
+```
+
+We also need to install the TS types for it, because the styled-components does not support TS by default.
 
 ```
 npm install @types/styled-components --save-dev
 ```
+
+Furthermore and to make it work with Jest, we need to do a bit more than just described in the
+[MUI documentation](https://mui.com/material-ui/guides/styled-engine/).
+Don't worry, we go through it together:
+
+1. Add `"@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]` to `paths` property in `tsconfig.json`
+2. Add the `'@mui/styled-engine': '@mui/styled-engine-sc'` alias in `config/webpack.config.js`
+3. Add `"^@mui/styled-engine$": "<rootDir>/node_modules/@mui/styled-engine-sc"` in `moduleNameMapper` property of `package.json`
+
+Not that hard.
+
+### 3.8 Prevent our navigation from causing eye cancer
+Now that we have MUI installed we can upgrade our navigation bar.
 
 [« previous](02-authentication.md) | [next »](04-foo.md)
