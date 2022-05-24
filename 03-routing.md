@@ -63,8 +63,8 @@ const configRef = useRef<Config>({
 });
 ```
 
-Finally and like for the current user, you need to provide the config by wrapping your app
-with its provider:
+Finally, like for the current user, we need to provide the config by wrapping the `<App>`
+with the `<ConfigProvider>`:
 
 ```typescript jsx
 return (
@@ -76,7 +76,7 @@ return (
 
 Well done! We are going to use this context later in this chapter.
 
-### 3.4 Install a routing library
+### 3.4 Installing a routing library
 Every browser app with multiple pages requires some routing mechanism.
 In case of React the most common library to have in mind is [react-router](https://reactrouter.com).
 We could build our own routing logic, but I think for such a common task it absolutely makes sense
@@ -91,9 +91,9 @@ npm install react-router-dom --save
 We are going to use the `<Link>` component of it in the next step.
 
 ### 3.5 Page layout components
-Before we create a page component, we need a reusable page layout.
-This ensures that we don't have to write the same logic whenever we create a page component.
-A new `BlankPage` component should build our base for every page layout.
+Before we are going to create a page component, we need a reusable page layout.
+This ensures that we don't have to write the same logic for every single page over and over again.
+I think a new `BlankPage` component should build the base for every page layout.
 
 ```typescript jsx
 // src/components/page-layout/BlankPage.tsx
@@ -125,7 +125,7 @@ export const BlankPage: FC<BlankPageProps> = (props) => {
 };
 ```
 
-Let's create a `NavBarPage` component based on the `BlankPage`:
+Next, let's create a `NavBarPage` component based on the `BlankPage`:
 
 ```typescript jsx
 // src/components/page-layout/NavBarPage.tsx
@@ -506,7 +506,7 @@ export const FunctionalLink: FC<FunctionalLinkProps> = (props) => (
 );
 ```
 
-As always, we leak our public available package components with an `index.ts` file:
+As always, we leak our public available components of the package with an `index.ts` file:
 ```typescript
 // src/packages/routing/index.ts
 
@@ -514,10 +514,10 @@ export * from './Link';
 ```
 
 ### 3.11 Prevent our navigation from causing eye cancer
-Now that we have MUI installed we can use its components and provide also a better
-navigation bar with no effort.
+Now that we have MUI installed, we can use its components and provide a better
+nav bar with no effort.
 
-So let's change our NavBarPage component that it looks like so:
+So let's change our `NavBarPage.tsx`, that it looks like so:
 
 ```typescript jsx
 // src/components/page-layout/NavBarPage.tsx
