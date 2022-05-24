@@ -51,13 +51,13 @@ Add a new context reference to `src/ServiceProvider.tsx` and `src/TestServicePro
 This can be done with the `React.useRef` hook.
 This makes sure, that the context is initialized only at the first render of the component.
 
-```typescript
+```typescript jsx
 import { Config, ConfigProvider } from '@packages/core/config';
 ```
 
 Then add this lines before the return statement of the provider:
 
-```typescript
+```typescript jsx
 const configRef = useRef<Config>({
     companyName: 'ACME',
 });
@@ -66,7 +66,7 @@ const configRef = useRef<Config>({
 Finally and like for the current user, you need to provide the config by wrapping your app
 with its provider:
 
-```typescript
+```typescript jsx
 return (
     <ConfigProvider value={configRef.current}>
         // previous returned stuff...
@@ -95,7 +95,7 @@ Before we create a page component, we need a reusable page layout.
 This ensures that we don't have to write the same logic whenever we create a page component.
 A new `BlankPage` component should build our base for every page layout.
 
-```typescript
+```typescript jsx
 // src/components/page-layout/BlankPage.tsx
 
 import React, { FC, ReactNode, useEffect } from 'react';
@@ -127,7 +127,7 @@ export const BlankPage: FC<BlankPageProps> = (props) => {
 
 Let's create a `NavBarPage` component based on the `BlankPage`:
 
-```typescript
+```typescript jsx
 // src/components/page-layout/NavBarPage.tsx
 
 import React, { FC, MouseEvent } from 'react';
@@ -202,7 +202,7 @@ Before we create some routes we need to prepare route targets.
 So let's create the page components of this tutorial.
 
 The index page:
-```typescript
+```typescript jsx
 // src/pages/IndexPage.tsx
 
 import { FC } from 'react';
@@ -214,7 +214,7 @@ export const IndexPage: FC = () => {
 ```
 
 The `RegisterPage`, within we are going to build the user registration form:
-```typescript
+```typescript jsx
 // src/pages/auth/Register.tsx
 
 import { FC } from 'react';
@@ -226,7 +226,7 @@ export const RegisterPage: FC = () => {
 ```
 
 A `MySettingsPage` to demonstrate what happens if the user logs out while being on this page:
-```typescript
+```typescript jsx
 // src/pages/user-management/MySettingsPage.tsx
 
 import { FC } from 'react';
@@ -242,7 +242,7 @@ and the bundled app in form of a `.js` file and the routing happens on client si
 So you won't be able to send a 404 status code from the server side,
 until you do server side rendering, or at least a server side check before sending the http header to the client.
 There are ways to achieve this, but this requires a server side script, which we do not cover here.
-```typescript
+```typescript jsx
 // src/pages/NotFoundPage.tsx
 
 import { FC } from 'react';
@@ -259,7 +259,7 @@ As we've learned in the chapters before, not only we have to find a way to suppo
 but also for the testing environment. So let's implement the specific routing in the right parts of our code.
 
 Let's first wrap our `<App>` with the `<BrowserRouter>` within the service provider for the browser environment:
-```typescript
+```typescript jsx
 // src/ServiceProvider.tsx
 
 import React, { FC, PropsWithChildren, useRef, useState } from 'react';
@@ -295,7 +295,7 @@ export const ServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
 
 The same applies to the testing environment's service provider but with another implementation.
 Luckily react-router-dom provides the `MemoryRouter` for us:
-```typescript
+```typescript jsx
 // src/TestServiceProvider.tsx
 
 import {
@@ -335,7 +335,7 @@ export const TestServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
 
 Finally, we are going to define our routes within the `<App>` component. Just delete the other stuff
 we have extracted to our `<NavBarPage>` component, so that the `App.tsx` looks like below:
-```typescript
+```typescript jsx
 // src/App.tsx
 
 import React, { useEffect } from 'react';
@@ -417,7 +417,225 @@ Don't worry, we go through it together:
 
 Not that hard.
 
-### 3.8 Prevent our navigation from causing eye cancer
-Now that we have MUI installed we can upgrade our navigation bar.
+### 3.8 Clean up the document body's css
+First we should clean up the document `body`'s margin.
+I don't know why but the default user agent stylesheet has a `margin: 8px;` setting.
+Probably a leftover from earlier times which wasn't removed for not breaking existing websites or so.
+Let's clean this up by adding a global style with [styled-components](https://styled-components.com/)
+to our `BlankPage` component.
+
+```typescript jsx
+// src/components/page-layout/BlankPage.tsx
+
+import React, { FC, ReactNode, useEffect } from 'react';
+import { useConfig } from '@packages/core/config';
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+  }
+`;
+
+export type BlankPageProps = {
+    title: string;
+    children?: ReactNode;
+};
+
+export const BlankPage: FC<BlankPageProps> = (props) => {
+    const { companyName } = useConfig();
+    const titleParts: string[] = [];
+    if (props.title) {
+        titleParts.push(props.title);
+    }
+    if (companyName) {
+        titleParts.push(companyName);
+    }
+    useEffect(() => {
+        if (document) {
+            document.title = titleParts.join(' :: ');
+        }
+    });
+    return (
+        <>
+            <GlobalStyle />
+            {props.children}
+        </>
+    );
+};
+```
+
+### 3.10 Provide reusable link components
+We should provide two different link components. Both should play well with the props of `@mui/material`'s link component.
+One link component should have the functionality of `react-router-dom`'s `Link` to route to another url.
+With the other link component it should be possible to only execute stuff by the `onClick` property without routing.
+We should create these components in the `@packages/core` folder, to make it available for any other package or component
+we have to create in the future.
+
+```typescript jsx
+// src/packages/routing/Link.tsx
+
+import React, { FC, ReactNode } from 'react';
+import { Link as MuiLink, LinkProps as MuiLinkProps } from '@mui/material';
+import { Link as ReactRouterDomLink } from 'react-router-dom';
+
+export type RoutingLinkProps = MuiLinkProps & {
+    to: string;
+    children?: ReactNode;
+};
+
+export const RoutingLink: FC<RoutingLinkProps> = (props) => {
+    return <MuiLink {...props} component={ReactRouterDomLink} />;
+};
+
+export type FunctionalLinkProps = MuiLinkProps & {
+    onClick: () => void;
+};
+
+export const FunctionalLink: FC<FunctionalLinkProps> = (props) => (
+    <MuiLink
+        {...props}
+        href="#"
+        onClick={(event) => {
+            event.preventDefault();
+            if (props.onClick) {
+                props.onClick();
+            }
+        }}
+    />
+);
+```
+
+As always, we leak our public available package components with an `index.ts` file:
+```typescript
+// src/packages/routing/index.ts
+
+export * from './Link';
+```
+
+### 3.11 Prevent our navigation from causing eye cancer
+Now that we have MUI installed we can use its components and provide also a better
+navigation bar with no effort.
+
+So let's change our NavBarPage component that it looks like so:
+
+```typescript jsx
+// src/components/page-layout/NavBarPage.tsx
+
+import React, { FC, useState } from 'react';
+import { BlankPage, BlankPageProps } from './BlankPage';
+import { anonymousAuthUser, useCurrentUser, useCurrentUserRepository } from '@packages/core/auth';
+import { useNavigate } from 'react-router-dom';
+import { Button, Toolbar, Typography, Container, Menu, MenuItem } from '@mui/material';
+import { useConfig } from '@packages/core/config';
+import { Home } from '@mui/icons-material';
+import { FunctionalLink, RoutingLink } from '@packages/core/routing';
+
+const LoggedInUserMenu: FC = () => {
+    const navigate = useNavigate();
+    const currentUserRepo = useCurrentUserRepository();
+    const currentUser = useCurrentUser();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    if (currentUser.type !== 'authenticated') {
+        return null;
+    }
+    function logoutUser() {
+        currentUserRepo.setCurrentUser(anonymousAuthUser);
+        navigate('/');
+    }
+    function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+        setAnchorEl(event.currentTarget);
+    }
+    function closeMenu() {
+        setAnchorEl(null);
+    }
+    const isMenuOpen = !!anchorEl;
+    return (
+        <>
+            <Button
+                id="basic-button"
+                aria-controls={isMenuOpen ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={isMenuOpen ? 'true' : undefined}
+                onClick={handleClick}>
+                {currentUser.data.username}
+            </Button>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={isMenuOpen}
+                onClose={closeMenu}
+                MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
+                <MenuItem
+                    onClick={() => {
+                        navigate('/user-management/my-settings');
+                        closeMenu();
+                    }}>
+                    My settings
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        logoutUser();
+                        closeMenu();
+                    }}>
+                    Logout
+                </MenuItem>
+            </Menu>
+        </>
+    );
+};
+
+const Nav: FC = () => {
+    const { companyName } = useConfig();
+    const navigate = useNavigate();
+    const currentUserRepo = useCurrentUserRepository();
+    const currentUser = useCurrentUser();
+    const isLoggedIn = currentUser.type === 'authenticated';
+    function loginUser() {
+        currentUserRepo.setCurrentUser({
+            type: 'authenticated',
+            apiKey: 'foo',
+            data: {
+                id: 'foo',
+                username: 'Linus',
+            },
+        });
+    }
+    return (
+        <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: '15px' }}>
+            <RoutingLink to="/">
+                <Home />
+            </RoutingLink>
+            <Typography component="h2" variant="h5" color="inherit" align="center" noWrap sx={{ flex: 1 }}>
+                {companyName}
+            </Typography>
+            {!isLoggedIn && (
+                <>
+                    <FunctionalLink onClick={loginUser} noWrap variant="button" href="/" sx={{ p: 1, flexShrink: 0 }}>
+                        Login
+                    </FunctionalLink>{' '}
+                    <Button variant="outlined" size="small" onClick={() => navigate('/auth/register')}>
+                        Sign up
+                    </Button>
+                </>
+            )}
+            {isLoggedIn && <LoggedInUserMenu />}
+        </Toolbar>
+    );
+};
+
+export type NavBarPageProps = BlankPageProps;
+
+export const NavBarPage: FC<NavBarPageProps> = (props) => {
+    return (
+        <BlankPage title={props.title}>
+            <Nav />
+            <Container>{props.children}</Container>
+        </BlankPage>
+    );
+};
+```
+
+Well done! I think it's time to have a look at translating things in the next chapter.
 
 [« previous](02-authentication.md) | [next »](04-foo.md)

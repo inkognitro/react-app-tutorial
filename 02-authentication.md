@@ -156,7 +156,7 @@ With DI, we usually need something like a service container which provides our s
 So let's create a service provider component to provide our required services and states to all of its nested child components.
 These services or states can be accessed by custom hooks, like the `useCurrentUserRepository` or `useCurrentUser` hooks we have written.
 
-```typescript
+```typescript jsx
 // src/ServiceProvider.tsx
 
 import React, { FC, PropsWithChildren, useRef, useState } from 'react';
@@ -184,7 +184,7 @@ because this service provider bootstraps the service implementations for browser
 So let's extend the given `index.tsx` with our created service provider
 and make sure that the `<App>` component is wrapped with it.
 
-```typescript
+```typescript jsx
 // src/index.tsx
 
 import ReactDOM from 'react-dom/client';
@@ -205,7 +205,7 @@ root.render(
 To see the result of our code, just make sure the `src/App.tsx` looks as below. Then, open your browser at
 [localhost:3000](http://localhost:3000).
 
-```typescript
+```typescript jsx
 // src/App.tsx
 
 import React, { MouseEvent, useEffect } from 'react';
@@ -283,7 +283,7 @@ but our tests just run locally in the console and not in a browser.
 So let's create a service provider for the testing environment which should contain
 either compatible or mocked services which are fulfilling the services' interfaces.
 
-```typescript
+```typescript jsx
 // src/TestServiceProvider.tsx
 
 import {
@@ -312,7 +312,7 @@ export const TestServiceProvider: FC<PropsWithChildren<{}>> = (props) => {
 
 We should wrap the `<App>` with it in the testing environment:
 
-```typescript
+```typescript jsx
 // src/App.test.tsx
 
 import React from 'react';
