@@ -238,10 +238,10 @@ export const MySettingsPage: FC = () => {
 ```
 
 And finally, a `NotFoundPage`. Keep in mind that the server only sends the `index.html`
-and the bundled app in form of a `.js` file and the routing happens on client side!
-So you won't be able to send a 404 status code from the server side,
-until you do server side rendering, or at least a server side check before sending the http header to the client.
-There are ways to achieve this, but this requires a server side script, which we do not cover here.
+and the bundled app in form of a `.js` file, so the routing happens on client side!
+However, you won't be able to send a 404 status code from the server side,
+until you do or at least a server side check before sending the http header to the client.
+There are various ways to solve this, but this requires a server side script, which we do not cover in this tutorial.
 ```typescript jsx
 // src/pages/NotFoundPage.tsx
 
