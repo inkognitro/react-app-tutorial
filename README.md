@@ -1,5 +1,3 @@
-[![BadgeMITLicense: MIT](./docs/MIT.svg)](LICENSE)
-
 > Special thanks go to [easylearn schweiz ag](https://easylearn.ch). This is the company I currently work for.
 > Our managers allowed me to create parts of this tutorial at working time.
 
@@ -36,6 +34,8 @@ Below you can see an overview of all steps of this tutorial.
 > just go to https://github.com/inkognitro/react-app-tutorial-code/compare and choose the specific tutorial step
 > branches to compare. Some steps are split into smaller branches.
 > Every step is an accumulation of all the steps before plus the code changes of the tutorial step.
+> 
+> Feel free to use the code for your own project. It's available under the MIT license :neutral_face:
 
 [Let's start »](01-setup.md)
 
