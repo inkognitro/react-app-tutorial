@@ -196,6 +196,14 @@ export const NavBarPage: FC<NavBarPageProps> = (props) => {
     );
 };
 ```
+and the export file:
+
+```typescript jsx
+// src/components/page-layout/index.ts
+
+export * from './BlankPage';
+export * from './NavBarPage';
+```
 
 ### 3.5 Create the page components 
 Before we create some routes we need to prepare route targets.
@@ -409,7 +417,7 @@ npm install @types/styled-components --save-dev
 
 Furthermore and to make it work with Jest, we need to do a bit more than just described in the
 [MUI documentation](https://mui.com/material-ui/guides/styled-engine/).
-Don't worry, we go through it together:
+Don't worry, we'll go through it together:
 
 1. Add `"@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]` to `paths` property in `tsconfig.json`
 2. Add the `'@mui/styled-engine': '@mui/styled-engine-sc'` alias in `config/webpack.config.js`
@@ -465,7 +473,7 @@ export const BlankPage: FC<BlankPageProps> = (props) => {
 };
 ```
 
-### 3.10 Provide reusable link components
+### 3.9 Provide reusable link components
 We should provide two different link components. Both should play well with the props of `@mui/material`'s link component.
 One link component should have the functionality of `react-router-dom`'s `Link` to route to another url.
 With the other link component it should be possible to only execute stuff by the `onClick` property without routing.
@@ -473,7 +481,7 @@ We should create these components in the `@packages/core` folder, to make it ava
 we have to create in the future.
 
 ```typescript jsx
-// src/packages/routing/Link.tsx
+// src/packages/core/routing/Link.tsx
 
 import React, { FC, ReactNode } from 'react';
 import { Link as MuiLink, LinkProps as MuiLinkProps } from '@mui/material';
@@ -508,7 +516,7 @@ export const FunctionalLink: FC<FunctionalLinkProps> = (props) => (
 
 As always, we leak our public available components of the package with an `index.ts` file:
 ```typescript
-// src/packages/routing/index.ts
+// src/packages/core/routing/index.ts
 
 export * from './Link';
 ```

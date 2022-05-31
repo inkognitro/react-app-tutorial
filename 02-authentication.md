@@ -260,7 +260,7 @@ function App() {
     const currentUserRepo = useCurrentUserRepository();
     useEffect(() => {
         currentUserRepo.init();
-    }, []);
+    }, [currentUserRepo]);
     return <CurrentUserPlayground />;
 }
 

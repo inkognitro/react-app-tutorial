@@ -39,6 +39,10 @@ Below you can see an overview of all steps of this tutorial.
 
 [Let's start »](01-setup.md)
 
+## Feedbacks
+[Sam](https://github.com/sami-akkawi):
+- **Chapter 3:** Maybe explain a bit about the external components that we are using, like: Context.Provider, Typography/Toolbar and their props like component, variant, sx
+
 ## Planned Tutorial steps for now
 This will probably change during the creation of the tutorial.
 
