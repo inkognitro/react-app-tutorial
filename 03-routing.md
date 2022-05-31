@@ -425,7 +425,21 @@ Don't worry, we'll go through it together:
 
 Not that hard.
 
-### 3.8 Clean up the document body's css
+### 3.8 Integrate the web fonts for MUI
+In order to fully install MUI, we need to provide the required fonts to the user's browser.
+In general, I prefer to download the fonts from external sources
+and to directly provide them to the user from my own server.
+This allows us to remain independent of third-party providers.
+This is also desirable from a security and availability perspective.
+Nevertheless, let's include the fonts directly from Google for now and add the following
+parts in the `<head>` of the `public/index.html` file by adding the following lines:
+
+```html
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+```
+
+### 3.9 Clean up the document body's css
 First we should clean up the document `body`'s margin.
 I don't know why but the default user agent stylesheet has a `margin: 8px;` setting.
 Probably a leftover from earlier times which wasn't removed for not breaking existing websites or so.
@@ -473,7 +487,7 @@ export const BlankPage: FC<BlankPageProps> = (props) => {
 };
 ```
 
-### 3.9 Provide reusable link components
+### 3.10 Provide reusable link components
 We should provide two different link components. Both should play well with the props of `@mui/material`'s link component.
 One link component should have the functionality of `react-router-dom`'s `Link` to route to another url.
 With the other link component it should be possible to only execute stuff by the `onClick` property without routing.
