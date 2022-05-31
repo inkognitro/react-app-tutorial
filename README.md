@@ -67,33 +67,32 @@ This will probably change during the creation of the tutorial.
    - `useTranslator` hook
    - `Translation` component with `ReactNode` placeholders
    - setup context
-5. Utilities
-   - `Message` type and `Message(s)` component
-6. Toaster
+5. Toaster
+   - **Utils**: `Message` type and `Message(s)` component
    - define toaster types
    - define `SubscribableToaster` class
    - setup context
    - create toaster with MUI
    - implement toaster component in root
    - create a link to dispatch a toast at index page
-7. Collections and Providers
+6. Collections and Providers
    - define types
    - createArrayProvider
    - explanation that this should also be done for `api-v1` collections
-8. Form elements
+7. Form elements
    - form element type definitions
    - `TextField`, `Dropdown` (use `Messages` component from utilities)
    - Error message enrichment by `modifier` function
    - Provide the user registration form skeleton
-9. ApiV1
+8. ApiV1
    - create [axios](https://axios-http.com) `http` request handler
    - create ApiV1RequestHandler
    - define `registerUserEndpoint.ts` with `shouldFail: boolean` param
    - build the `useApiV1RequestHandler` hook, open for middleware
-10. Wire the User registration form
-    - use the `useApiV1RequestHandler` hook
-    - make two buttons `registerAndSucceed` and `registerAndFail` 
-    - extend the `useApiV1RequestHandler` hook with `showToastMessages: boolean` and its middleware
-11. Summing up
+9. Wire the User registration form
+   - use the `useApiV1RequestHandler` hook
+   - make two buttons `registerAndSucceed` and `registerAndFail` 
+   - extend the `useApiV1RequestHandler` hook with `showToastMessages: boolean` and its middleware
+10. Summing up
     - What to do next: Optimize with [NextJs](https://nextjs.org)?
     - Some differences to current architecture in naming (Provided Vs. Provider)
