@@ -144,7 +144,7 @@ Luckily I hadn't committed yet. With this check you are save, or at least a bit 
 > You can fix that by running `lint:fix` after every commit but this would be really annoying.
 > It's easier to change the end-of-line style of your code editor to `LF`
 > (e.g. [see WebStorm docs](https://www.jetbrains.com/help/webstorm/configuring-line-endings-and-line-separators.html))
-> and to adjust the Git configuration `core.autocrlf=false`.
+> and to adjust the Git configuration `core.autocrlf=false`
 > (see [this article](https://stackoverflow.com/questions/1967370/git-replacing-lf-with-crlf)).
 
 [« introduction](README.md) | [next »](02-authentication.md)
