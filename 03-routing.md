@@ -378,8 +378,6 @@ function App() {
 export default App;
 ```
 
-> :floppy_disk: [branch 03-routing-1](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
-
 Nice one! You should now be able to go to different routes in the app.
 At [localhost:3000/foo](http://localhost:3000/foo) you should see the `NotFoundPage`.
 This page should also appear, when you log in, switch to [localhost:3000/user-management/my-settings](http://localhost:3000/user-management/my-settings),
@@ -388,6 +386,8 @@ and then do a logout.
 Also execute `npm run test` in your console and see if your test passes.
 Otherwise, have a look at the [03-routing-1 branch](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
 to compare with yours.
+
+> :floppy_disk: [branch 03-routing-1](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
 
 ### 3.7 Next design level with MUI
 There's no need to reinvent the wheel over and over again by creating everything from scratch.
