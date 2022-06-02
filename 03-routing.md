@@ -378,6 +378,8 @@ function App() {
 export default App;
 ```
 
+> :floppy_disk: [branch 03-routing-1](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
+
 Nice one! You should now be able to go to different routes in the app.
 At [localhost:3000/foo](http://localhost:3000/foo) you should see the `NotFoundPage`.
 This page should also appear, when you log in, switch to [localhost:3000/user-management/my-settings](http://localhost:3000/user-management/my-settings),
@@ -659,5 +661,7 @@ export const NavBarPage: FC<NavBarPageProps> = (props) => {
 ```
 
 Well done! I think it's time to have a look at translating things in the next chapter.
+
+> :floppy_disk: [branch 03-routing-2](https://github.com/inkognitro/react-app-tutorial-code/compare/03-routing-1...03-routing-2)
 
 [« previous](02-authentication.md) | [next »](04-i18n.md)

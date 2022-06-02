@@ -330,6 +330,8 @@ test('renders app', () => {
 ```
 You should be able to check it by running `npm run test`. Well done!
 
+> :floppy_disk: [branch 02-auth-1](https://github.com/inkognitro/react-app-tutorial-code/compare/01-setup...02-auth-1)
+
 ### 2.7 Ramp up our import paths
 To not always reference to our packages folder by a relative import path,
 we can alias our `packages` folder with `@packages`.
@@ -390,5 +392,7 @@ Now, let's add the last piece to make our import alias work and add the followin
 }
 ```
 Restart the app and check the browser. Everything should work as expected now, including our `@packages` alias.
+
+> :floppy_disk: [branch 02-auth-2](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-1...02-auth-2)
 
 [« previous](01-setup.md) | [next »](03-routing.md)
