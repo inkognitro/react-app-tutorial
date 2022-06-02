@@ -387,7 +387,7 @@ Also execute `npm run test` in your console and see if your test passes.
 Otherwise, have a look at the [03-routing-1 branch](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
 to compare with yours.
 
-> :floppy_disk: [branch 03-routing-1](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
+:floppy_disk: [branch 03-routing-1](https://github.com/inkognitro/react-app-tutorial-code/compare/02-auth-2...03-routing-1)
 
 ### 3.7 Next design level with MUI
 There's no need to reinvent the wheel over and over again by creating everything from scratch.
@@ -662,6 +662,6 @@ export const NavBarPage: FC<NavBarPageProps> = (props) => {
 
 Well done! I think it's time to have a look at translating things in the next chapter.
 
-> :floppy_disk: [branch 03-routing-2](https://github.com/inkognitro/react-app-tutorial-code/compare/03-routing-1...03-routing-2)
+:floppy_disk: [branch 03-routing-2](https://github.com/inkognitro/react-app-tutorial-code/compare/03-routing-1...03-routing-2)
 
 [« previous](02-authentication.md) | [next »](04-i18n.md)
