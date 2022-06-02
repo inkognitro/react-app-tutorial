@@ -127,8 +127,6 @@ the mentioned two options described above.
 "lint:fix": "tsc && eslint ./src --ext .ts,.tsx --quiet --fix"
 ```
 
-:floppy_disk: [branch 01-setup](https://github.com/inkognitro/react-app-tutorial-code/tree/01-setup)
-
 You should now be able to test the linting by running `npm run lint` in your console.
 This prints the result of what needs to be corrected if some code does not correspond with the linting rules.
 If you run `npm run lint:fix`, the code style is going to be automatically fixed when possible.
@@ -148,5 +146,7 @@ Luckily I hadn't committed yet. With this check you are save, or at least a bit 
 > (e.g. [see WebStorm docs](https://www.jetbrains.com/help/webstorm/configuring-line-endings-and-line-separators.html))
 > and to adjust the Git configuration `core.autocrlf=false`
 > (see [this article](https://stackoverflow.com/questions/1967370/git-replacing-lf-with-crlf)).
+
+:floppy_disk: [branch 01-setup](https://github.com/inkognitro/react-app-tutorial-code/tree/01-setup)
 
 [« introduction](README.md) | [next »](02-authentication.md)
