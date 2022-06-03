@@ -277,7 +277,7 @@ return (
 );
 ```
 
-## 5.4. Dispatch some toast messages
+## 5.5 Dispatch some toast messages
 To be able to test if our toaster works, we should add some toast-message-dispatcher-links.
 This time we use the `useToaster()` hook because we only want to dispatch messages no matter which
 implementation of the toaster is provided.
