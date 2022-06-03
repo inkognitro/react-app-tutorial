@@ -142,7 +142,7 @@ export * from './subscribableToaster';
 ## 5.2 Providing the services
 Because the toaster implementations are not really dependent on the environment.
 We can use the same logic for the `<TestServiceProvider>` as we are going to write in the
-`<ServiceProvider>` component. Just add the following code to the two files
+`<ServiceProvider>` component. Just add the following code to the two files:
 
 ```typescript jsx
 // src/ServiceProvider.tsx and src/TestServiceProvider.tsx
