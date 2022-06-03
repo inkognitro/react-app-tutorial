@@ -1,4 +1,4 @@
-[« previous](04-i18n.md) | [next »](06-collections.md)
+[« previous](04-i18n.md) | [next »](06-form.md)
 
 ## 5. Toaster
 Within this chapter we are going to provide a way to fire messages which are displayed to the current user
@@ -324,4 +324,4 @@ export const IndexPage: FC = () => {
 
 :floppy_disk: [branch 05-toaster](https://github.com/inkognitro/react-app-tutorial-code/compare/04-i18n-2...05-toaster)
 
-[« previous](04-i18n.md) | [next »](06-collections.md)
+[« previous](04-i18n.md) | [next »](06-form.md)

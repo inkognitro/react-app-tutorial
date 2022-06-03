@@ -30,7 +30,8 @@ Below you can see an overview of all steps of this tutorial.
 2. [Authentication](02-authentication.md) - Authentication context for the current user, import paths
 3. [Routing](03-routing.md) - Prepare page layouts and the page's skeletons, mui, styled-components
 4. [Internationalization](04-i18n.md) - Translate contents, localization base, switching between two languages
-5. [Toaster](05-toaster.md) - Provide a way to trigger messages (toasts) to the website user (WIP)
+5. [Toaster](05-toaster.md) - Provide a way to trigger messages (toasts) to the website user
+6. [Form](06-form.md) - Provide basic form elements and the possibility of error enrichment (WIP)
 
 > :bulb: To compare the code changes between the tutorial steps,
 > just go to https://github.com/inkognitro/react-app-tutorial-code/compare and choose the specific tutorial step
@@ -69,7 +70,7 @@ This will probably change during the creation of the tutorial.
    - `useTranslator` hook
    - `Translation` component with `ReactNode` placeholders
    - setup context
-5. Toaster (**in progress**)
+5. Toaster (**done**)
    - **Utils**: `Message` type and `Message(s)` component
    - define toaster types
    - define `SubscribableToaster` class
@@ -77,15 +78,15 @@ This will probably change during the creation of the tutorial.
    - create toaster with MUI
    - implement toaster component in root
    - create a link to dispatch a toast at index page
-6. Collections and Providers
-   - define types
-   - createArrayProvider
-   - explanation that this should also be done for `api-v1` collections
-7. Form elements
+6. Form elements (**in progress**)
    - form element type definitions
    - `TextField`, `Dropdown` (use `Messages` component from utilities)
    - Error message enrichment by `modifier` function
    - Provide the user registration form skeleton
+7. Collections and Providers
+   - define types
+   - createArrayProvider
+   - explanation that this should also be done for `api-v1` collections
 8. ApiV1
    - create [axios](https://axios-http.com) `http` request handler
    - create ApiV1RequestHandler
