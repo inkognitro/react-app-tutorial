@@ -38,7 +38,7 @@ Below you can see an overview of all steps of this tutorial.
 > branches to compare. Some steps are split into smaller branches.
 > Every step is an accumulation of all the steps before plus the code changes of the tutorial step.
 > 
-> Feel free to use the code for your own project. It's available under the MIT license :neutral_face:
+> Feel free to use the code for your own project. It's available under the MIT license :wink:
 
 [Let's start »](01-setup.md)
 
