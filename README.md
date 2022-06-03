@@ -30,7 +30,7 @@ Below you can see an overview of all steps of this tutorial.
 2. [Authentication](02-authentication.md) - Authentication context for the current user, import paths
 3. [Routing](03-routing.md) - Prepare page layouts and the page's skeletons, mui, styled-components
 4. [Internationalization](04-i18n.md) - Translate contents, localization base, switching between two languages
-5. [Toaster](05-toaster.md) - Provide a way to send push messages (toasts) to the website user (WIP)
+5. [Toaster](05-toaster.md) - Provide a way to trigger messages (toasts) to the website user (WIP)
 
 > :bulb: To compare the code changes between the tutorial steps,
 > just go to https://github.com/inkognitro/react-app-tutorial-code/compare and choose the specific tutorial step
