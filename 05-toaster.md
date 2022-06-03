@@ -1,14 +1,15 @@
 [« previous](04-i18n.md) | [next »](06-form.md)
 
 ## 5. Toaster
-Within this chapter we are going to provide a way to fire messages which are displayed to the current user
+Within this chapter we are going to provide a way to fire and forget messages which are displayed to the current user
 on the website. This is useful for example to inform a user about a successful save process in the backend.
 
 ## 5.1 Creating the toaster package
-It would be nice to have a service to easily trigger some toast messages with different severities like
-`success` or `error`.  Best case is to be able to trigger a message containing any content: A `ReactNode` or string.
-I think it's useful to let the messages disappear after 3 seconds or so.
-So let's try to define an interface and a context for our needs:
+It would be nice to have a service to easily dispatch some toast messages with different severities like
+`success` or `error`.  Best case I think would be to be able to trigger a message containing any content:
+Must obviously be a `ReactNode` or a string.
+I think it's also useful to let the messages disappear after 3 seconds or so.
+So let's try to define an interface and a context for these requirements:
 
 ```typescript jsx
 // src/packages/core/toaster/toaster.ts
@@ -54,14 +55,14 @@ export function useToaster(): Toaster {
 }
 ```
 
-I think from a toaster-user-perspective this is an acceptable solution.
-But from a toaster-manager-perspective we need to consider that when- or even wherever a toast message is dispatched
-the toast messages should run through a central bus and be forwarded to every handler which want to do something
-with it.
+I think from a toaster-user-perspective this is an acceptable way to dispatch toast messages.
+From a toaster-manager-perspective we also need to consider that from wherever a toast message is dispatched
+these messages should run through a central bus and be forwarded to every handler which wants to do something
+with it. The observer pattern would be a perfect fit for that!
 
 > :bulb: The [observer pattern](https://www.tutorialspoint.com/design_pattern/observer_pattern.htm):
-> In terms of the observer patter a "subject" normally has a list of "observers".
-> These observers are triggered by the subject everytime a specific event happens.
+> In terms of the observer pattern, a "subject" normally has a list of "observers",
+> which are triggered by the subject whenever a specific event happens.
 > This event can be a state change or something other. One may call this also the "listener" or "subscriber" pattern.
 
 So let's reach this with a subscribable toaster implementation:
@@ -265,7 +266,7 @@ return (
 ## 5.4. Dispatch some toast messages
 To be able to test if our toaster works, we should add some toast-message-dispatcher-links.
 This time we use the `useToaster()` hook because we only want to dispatch messages no matter which
-implementation of the toaster is behind.
+implementation of the toaster is provided.
 
 ```typescript jsx
 // src/pages/IndexPage.tsx
