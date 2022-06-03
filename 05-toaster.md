@@ -9,7 +9,21 @@ It would be nice to have a service to easily dispatch some toast messages with d
 `success` or `error`.  Best case I think would be to be able to trigger a message containing any content:
 Must obviously be a `ReactNode` or a string.
 I think it's also useful to let the messages disappear after 3 seconds or so.
-So let's try to define an interface and a context for these requirements:
+
+First, we should install the uuid package to generate some random uuids for toast messages.
+It's always useful to have an identifier on an object:
+
+```
+npm install uuid --save
+```
+
+and its types:
+
+```
+npm install @types/uuid --save-dev
+```
+
+Now let's try to define an interface and a context for the requirements above:
 
 ```typescript jsx
 // src/packages/core/toaster/toaster.ts
