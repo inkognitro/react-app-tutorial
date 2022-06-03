@@ -252,7 +252,7 @@ Add this component also to the exports in the `index.ts`.
 
 > :bulb: The return statement of a hook must either be `undefined` or a function.
 > The return function is a cleanup function.
-> It's the equivalent of the class components `componentDidUnmount` with the possibility of better encapsulation.
+> It's the equivalent of the class component's `componentDidUnmount` with the possibility of better encapsulation.
 
 ## 5.4 Implementing the toaster subscriber
 I think the `BlankPage` component is the right place to implement the toaster subscriber we've created.
