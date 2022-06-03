@@ -10,7 +10,7 @@ It would be nice to have a service to easily dispatch some toast messages with d
 Must obviously be a `ReactNode` or a string.
 I think it's also useful to let the messages disappear after 3 seconds or so.
 
-First, we should install the uuid package to generate some random uuids for toast messages.
+First, we should install the `uuid` package to generate some random uuids for new toast messages.
 It's always useful to have an identifier on an object:
 
 ```
