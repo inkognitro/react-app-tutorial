@@ -80,12 +80,14 @@ This will probably change during the creation of the tutorial.
    - create a link to dispatch a toast at index page
 6. Form elements (**in progress**)
    - form element type definitions
-   - `TextField`, `Dropdown` (use `Messages` component from utilities)
-   - Error message enrichment by `modifier` function
+   - `TextField`, `Checkbox` and its states
+   - Error message enrichment by `getStateWithModifiedFormElementMessages` function
    - Provide the user registration form skeleton
 7. Collections and Providers
    - define types
-   - createArrayProvider
+   - arrayProvider creation
+   - create the Female / Male selection form element and use the arrayProvider
+   - extend the `getStateWithModifiedFormElementMessages` function
    - explanation that this should also be done for `api-v1` collections
 8. ApiV1
    - create [axios](https://axios-http.com) `http` request handler
@@ -95,7 +97,8 @@ This will probably change during the creation of the tutorial.
 9. Wire the User registration form
    - use the `useApiV1RequestHandler` hook
    - make two buttons `registerAndSucceed` and `registerAndFail` 
-   - extend the `useApiV1RequestHandler` hook with `showToastMessages: boolean` and its middleware
+   - add the toaster middleware
+   - extend the `useApiV1RequestHandler` hook with `showToastMessages: boolean`
 10. Summing up
-    - What to do next: Optimize with [NextJs](https://nextjs.org)?
-    - Some differences to current architecture in naming (Provided Vs. Provider)
+    - What could we do better
+    - What could we do next
