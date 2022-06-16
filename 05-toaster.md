@@ -160,6 +160,7 @@ return (
             {/* the already existing context providers... */}
         </SubscribableToasterProvider>
     </ToasterProvider>
+);
 ```
 In the meantime absolutely known stuff for us.
 Let's create a toast message renderer in the next step.
