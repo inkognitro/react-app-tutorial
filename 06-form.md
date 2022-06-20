@@ -509,6 +509,154 @@ Cool! I think we are ready for creating the form, after we exported these parts 
 :floppy_disk: [branch 06-form-1](https://github.com/inkognitro/react-app-tutorial-code/compare/05-toaster...06-form-1)
 
 ### 6.7 Create the registration form
+Time to see the previously created components in action! So let's move on to our `RegisterPage` component and
+add the registration form to it like so:
+
+```typescript jsx
+// src/pages/auth/RegisterPage.tsx
+
+import { FC, useState } from 'react';
+import { NavBarPage } from '@components/page-layout';
+import { useTranslator, T } from '@packages/core/i18n';
+import {
+    Button,
+    Checkbox,
+    CheckboxState,
+    createCheckboxState,
+    createTextFieldState,
+    Form,
+    TextField,
+    TextFieldState,
+} from '@packages/core/form';
+import { FunctionalLink } from '@packages/core/routing';
+import { Typography } from '@mui/material';
+
+type RegistrationFormState = {
+    usernameField: TextFieldState;
+    emailField: TextFieldState;
+    passwordField: TextFieldState;
+    agreeCheckbox: CheckboxState;
+};
+
+function createRegistrationFormState(): RegistrationFormState {
+    return {
+        usernameField: createTextFieldState(),
+        emailField: createTextFieldState(),
+        passwordField: createTextFieldState(),
+        agreeCheckbox: createCheckboxState(),
+    };
+}
+
+type RegistrationFormProps = {
+    data: RegistrationFormState;
+    onChangeData: (data: RegistrationFormState) => void;
+};
+
+const RegistrationForm: FC<RegistrationFormProps> = (props) => {
+    const { t } = useTranslator();
+    const termsAndConditionsLabel = (
+        <T
+            id="pages.registerPage.agreeOnTermsAndConditions"
+            placeholders={{
+                termsAndConditions: (
+                    <FunctionalLink onClick={() => console.log('open terms and conditions')}>
+                        {t('pages.registerPage.termsAndConditions')}
+                    </FunctionalLink>
+                ),
+            }}
+        />
+    );
+    return (
+        <Form>
+            <TextField
+                label={t('pages.registerPage.username')}
+                data={props.data.usernameField}
+                onChangeData={(data) => props.onChangeData({ ...props.data, usernameField: data })}
+                type="text"
+                maxLength={16}
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                name="username"
+            />
+            <TextField
+                label={t('pages.registerPage.email')}
+                data={props.data.emailField}
+                onChangeData={(data) => props.onChangeData({ ...props.data, emailField: data })}
+                type="text"
+                maxLength={191}
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                name="email"
+            />
+            <TextField
+                label={t('pages.registerPage.password')}
+                data={props.data.passwordField}
+                onChangeData={(data) => props.onChangeData({ ...props.data, passwordField: data })}
+                type="password"
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                name="password"
+            />
+            <Checkbox
+                label={termsAndConditionsLabel}
+                data={props.data.agreeCheckbox}
+                onChangeData={(data) => props.onChangeData({ ...props.data, agreeCheckbox: data })}
+                margin="dense"
+            />
+        </Form>
+    );
+};
+
+export const RegisterPage: FC = () => {
+    const { t } = useTranslator();
+    const [registrationForm, setRegistrationForm] = useState(createRegistrationFormState());
+    return (
+        <NavBarPage title={t('pages.registerPage.title')}>
+            <Typography component="h1" variant="h5">
+                {t('pages.registerPage.title')}
+            </Typography>
+            <RegistrationForm data={registrationForm} onChangeData={(data) => setRegistrationForm(data)} />
+            <Button margin="dense" variant="outlined" color="primary">
+                {t('pages.registerPage.signUp')}
+            </Button>
+        </NavBarPage>
+    );
+};
+```
+
+Let's define the used translation keys within the `pages.registerPage` property in our language files:
+
+```json
+// src/components/translations/deCH.json
+
+"registerPage": {
+    "title": "Registrieren",
+    "username": "Benutzername",
+    "email": "E-Mail Adresse",
+    "password": "Passwort",
+    "agreeOnTermsAndConditions": "Ich bin mit den {{termsAndConditions}} einverstanden.",
+    "termsAndConditions": "AGB",
+    "signUp": "Registrieren"
+}
+```
+
+and
+```json
+// src/components/translations/enUS.json
+
+"registerPage": {
+    "title": "Sign up",
+    "username": "Username",
+    "email": "Email address",
+    "password": "Password",
+    "agreeOnTermsAndConditions": "I agree on the {{termsAndConditions}}.",
+    "termsAndConditions": "terms and conditions",
+    "signUp": "Sign up"
+}
+```
 
 :floppy_disk: [branch 06-form-2](https://github.com/inkognitro/react-app-tutorial-code/compare/06-form-1...06-form-2)
 
