@@ -240,7 +240,7 @@ export function getStateWithEnrichedFormElementStates<S = any>(anyState: S, sett
                 ? [...settings.prefixPath, ...subState.pathPart]
                 : settings.prefixPath;
         // @ts-ignore
-        newState[key] = getStateWithModifiedFormElementMessages(subState, {
+        newState[key] = getStateWithEnrichedFormElementStates(subState, {
             ...settings,
             prefixPath,
         });
@@ -496,7 +496,6 @@ export type ButtonProps = MuiButtonProps & {
 export const Button: FC<ButtonProps> = (props) => {
     let muiButtonProps: ButtonProps = { ...props };
     delete muiButtonProps.margin;
-    delete muiButtonProps.onClick;
     return (
         <FormControl margin={props.margin} fullWidth={props.fullWidth}>
             <MuiButton {...muiButtonProps} />
@@ -659,5 +658,9 @@ and
 ```
 
 :floppy_disk: [branch 06-form-2](https://github.com/inkognitro/react-app-tutorial-code/compare/06-form-1...06-form-2)
+
+> :bulb: If you like to check if everything works fine, just add following code to your codebase.
+> But keep in mind: We continue the tutorial without commit the following changes:
+> [branch 06-form-testout](https://github.com/inkognitro/react-app-tutorial-code/compare/06-form-2...06-form-testout)
 
 [« previous](05-toaster.md) | [next »](07-collections.md)
