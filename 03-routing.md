@@ -491,6 +491,44 @@ export const BlankPage: FC<BlankPageProps> = (props) => {
 };
 ```
 
+### 3.11 Provide the theme
+To be able to access the theme we should create one and provide it like so:
+
+```typescript jsx
+// src/components/theme/mui.ts
+
+import { createTheme } from '@mui/material';
+
+export const theme = createTheme();
+```
+This is the place where we can modify the styles for our MUI components.
+
+Let's export it like below.
+```typescript jsx
+// src/components/theme/index.ts
+
+export * from './mui';
+```
+
+Finally, we should to provide the theme in the `ServiceProvider` and `TestServiceProvider` like so
+```typescript jsx
+// src/ServiceProvider.tsx and src/TestServiceProvider.tsx
+
+// add the following import statements:
+import { ThemeProvider as MuiThemeProvider } from '@mui/material';
+import { ThemeProvider as ScThemeProvider } from 'styled-components';
+import { theme } from '@components/theme';
+
+// wrap the other providers with the theme service providers
+return (
+    <MuiThemeProvider theme={theme}>
+        <ScThemeProvider theme={theme}>
+            {/* other service providers */}
+        </ScThemeProvider>
+    </MuiThemeProvider>
+);
+```
+
 ### 3.10 Provide reusable link components
 We should provide two different link components. Both should play well with the props of `@mui/material`'s link component.
 One link component should have the functionality of `react-router-dom`'s `Link` to route to another url.
