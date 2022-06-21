@@ -505,7 +505,7 @@ export const Button: FC<ButtonProps> = (props) => {
     );
 };
 ```
-Cool! I think we are ready for creating the form, after we exported these parts in an `index.ts`!.
+Cool! I think we are ready for creating the form, after we exported these parts in the `index.ts`!
 
 :floppy_disk: [branch 06-form-1](https://github.com/inkognitro/react-app-tutorial-code/compare/05-toaster...06-form-1)
 
