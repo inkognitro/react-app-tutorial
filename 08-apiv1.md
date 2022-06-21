@@ -1,4 +1,4 @@
-[« previous](06-form.md) | [next »](08-apiv1.md)
+[« previous](07-collections.md) | [next »](09-wiring.md)
 
 ## 8. ApiV1
 TBD
@@ -7,4 +7,4 @@ TBD
 
 :floppy_disk: [branch 08-apiv1-1](https://github.com/inkognitro/react-app-tutorial-code/compare/08-apiv1-1...08-apiv1-2)
 
-[« previous](06-form.md) | [next »](08-apiv1.md)
+[« previous](07-collections.md) | [next »](09-wiring.md)
