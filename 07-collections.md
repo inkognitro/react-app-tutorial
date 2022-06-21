@@ -222,7 +222,272 @@ export * from './arrayProvider';
 
 :floppy_disk: [branch 07-collections-1](https://github.com/inkognitro/react-app-tutorial-code/compare/06-form-2...07-collections-1)
 
+### 7.4 Create a selection form component
+Before we can profit from the advantages of our `ArrayCollectionProvider` we must create a component
+which requires a `CollectionProvider` property to work with a collection.
+I think a dropdown component is a common use case for that.
 
+So let's first write a selection component.
+This one does not use the collection provider yet, but is more an adapter for some MUI components:
+
+```typescript jsx
+// src/packages/core/form/CoreSelection.tsx
+
+import React, { FC, ReactNode, useState } from 'react';
+import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { v4 } from 'uuid';
+import { useTranslator } from '@packages/core/i18n';
+import { Entry } from '@packages/core/collection';
+
+export type CoreSelectionProps<Data = any> = {
+    variant?: 'standard' | 'outlined' | 'filled';
+    margin?: 'dense' | 'normal' | 'none';
+    label?: ReactNode;
+    options: Entry<Data>[];
+    chosenOption: null | Entry<Data>;
+    renderOption: (entry: Entry<Data>) => ReactNode;
+    canChooseNone?: boolean;
+    onChange?: (option: null | Entry<Data>) => void;
+    disabled?: boolean;
+    readOnly?: boolean;
+    error?: boolean;
+    errorSection?: ReactNode;
+    fullWidth?: boolean;
+    size?: 'small' | 'medium';
+};
+
+export const CoreSelection: FC<CoreSelectionProps> = (props) => {
+    const { t } = useTranslator();
+    const [labelId] = useState(v4());
+    const shouldChosenOptionBeAddedToOptions =
+        props.chosenOption && !props.options.find((o) => o.key === props.chosenOption?.key);
+    const options: Entry[] =
+        props.chosenOption && shouldChosenOptionBeAddedToOptions
+            ? [props.chosenOption, ...props.options]
+            : props.options;
+    const shouldNoneOptionBeShown = !props.chosenOption || props.canChooseNone;
+    function getEntryByKeyOrNull(key: string): null | Entry {
+        const entry = options.find((e) => e.key === key);
+        if (!entry) {
+            return null;
+        }
+        return entry;
+    }
+    return (
+        <FormControl
+            margin={props.margin}
+            variant={props.variant}
+            error={props.error}
+            fullWidth={props.fullWidth}
+            size={props.size}>
+            {props.label && <InputLabel id={labelId}>{props.label}</InputLabel>}
+            <Select
+                readOnly={props.readOnly}
+                disabled={props.disabled}
+                labelId={labelId}
+                value={props.chosenOption?.key ?? ''}
+                onChange={(event) => {
+                    if (props.onChange) {
+                        props.onChange(getEntryByKeyOrNull(event.target.value));
+                    }
+                }}
+                label={props.label}>
+                {shouldNoneOptionBeShown && (
+                    <MenuItem value="">
+                        <em>{t('core.form.selection.choose')}</em>
+                    </MenuItem>
+                )}
+                {options.map((o) => (
+                    <MenuItem key={o?.key} value={o?.key}>
+                        {props.renderOption(o)}
+                    </MenuItem>
+                ))}
+            </Select>
+            {props.errorSection}
+        </FormControl>
+    );
+};
+```
+
+Next, let's support a new form element type `SINGLE_SELECTION`, by doing the following steps:
+
+```typescript
+// src/packages/core/form/formElementState.ts
+
+// Add following import statement:
+import { Entry } from '@packages/core/collection';
+
+// Make the FormElementTypes enum look like so:
+export enum FormElementTypes {
+    TEXT_FIELD = 'textField-c615d5de',
+    CHECKBOX = 'checkbox-c615d5de',
+    SINGLE_SELECTION = 'singleSelection-c615d5de',
+}
+
+// Create a new form element state for a single selection:
+export type SingleSelectionState<D = any> = GenericFormElementState<
+    FormElementTypes.SINGLE_SELECTION,
+    { chosenOption: null | Entry<D>; messages: Message[] }
+    >;
+
+// Add the state to the FormElementState union type:
+export type FormElementState = TextFieldState | CheckboxState | SingleSelectionState;
+
+
+// Write a single state selection factory function, to reuse it later:
+export function createSingleSelectionState<D = any>(
+    partial: Partial<Omit<SingleSelectionState, 'type'>> = {}
+): SingleSelectionState<D> {
+    return {
+        messages: [],
+        chosenOption: null,
+        ...partial,
+        type: FormElementTypes.SINGLE_SELECTION,
+    };
+}
+```
+
+Don't forget to support the automatic form element message enrichment by adding the
+`FormElementTypes.SINGLE_SELECTION` in the switch statement of `formElementStatesEnrichment.ts`,
+like we have done it for the text field and the checkbox.
+
+And we also have to add the translation key for `core.form.selection.choose`:
+
+```json
+// src/components/translations/deCH.json
+
+"core": {
+    // other keys...
+    "form": {
+        "selection": {
+          "choose": "Bitte wählen"
+        }
+    }
+  // other keys...
+}
+```
+
+and
+```json
+// src/components/translations/enUS.json
+
+"core": {
+    // other keys...
+    "form": {
+        "selection": {
+          "choose": "Please choose"
+        }
+    }
+}
+```
+
+### 7.5 Create a gender selection in the user registration form
+Now, we are able to profit from the work we have done so far.
+Let's create a gender selection in the user registration form with no effort.
+
+```typescript jsx
+// src/pages/auth/RegisterPage.tsx
+
+// Additionally import the single selection state and its factory function
+import {
+    createSingleSelectionState,
+    SingleSelectionState,
+    // others...
+} from '@packages/core/form';
+
+// Add the following import statements
+import { SingleSelection } from '@packages/core/form/SingleSelection';
+import { Entry, useArrayCollectionProvider } from '@packages/core/collection';
+
+// Create the genders array
+type GenderId = 'f' | 'm' | 'o';
+const genderIds: GenderId[] = ['f', 'm', 'o'];
+
+// Extend the registration form state with the gender selection:
+type RegistrationFormState = {
+    genderSelection: SingleSelectionState<GenderId>;
+    // others...
+};
+
+// Extend the factory function as well:
+function createRegistrationFormState(): RegistrationFormState {
+    return {
+        genderSelection: createSingleSelectionState(),
+        // others...
+    };
+}
+
+// Insert the following hook in the top of the RegistrationForm component:
+const genderIdsProvider = useArrayCollectionProvider<GenderId>({
+    dataArray: genderIds,
+    createEntryKey: (gId) => gId,
+});
+
+// Add the gender selection component as the first child of the <Form> component like so:
+<SingleSelection
+    data={props.data.genderSelection}
+    onChangeData={(data) => props.onChangeData({ ...props.data, genderSelection: data })}
+    provider={genderIdsProvider}
+    renderOption={(e: Entry<GenderId>) => {
+        switch (e.data) {
+            case 'f':
+                return t('pages.registerPage.genderOptions.female');
+            case 'm':
+                return t('pages.registerPage.genderOptions.male');
+            case 'o':
+                return t('pages.registerPage.genderOptions.other');
+            default:
+                console.error(`genderId "${e.data}" is not supported!`);
+                return null;
+        }
+    }}
+    label={t('pages.registerPage.gender')}
+    variant="outlined"
+    margin="dense"
+    canChooseNone
+    fullWidth
+/>
+```
+
+Don't forget to add the translation keys:
+```json
+// src/components/translations/deCH.json
+
+"pages": {
+    // other keys...
+    "registerPage": {
+        "gender": "Geschlecht",
+        "genderOptions": {
+            "female": "Weiblich",
+            "male": "Männlich",
+            "other": "Andere"
+        },
+        // other keys...
+    }
+    // other keys...
+}
+```
+
+and
+```json
+// src/components/translations/enUS.json
+
+"pages": {
+    // other keys...
+    "registerPage": {
+        "gender": "Gender",
+        "genderOptions": {
+            "female": "Female",
+            "male": "Male",
+            "other": "Other"
+        },
+        // other keys...
+    }
+    // other keys...
+}
+```
+
+Cool, let's check it in the browser!
 
 :floppy_disk: [branch 07-collections-2](https://github.com/inkognitro/react-app-tutorial-code/compare/07-collections-1...07-collections-2)
 
