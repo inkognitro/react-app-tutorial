@@ -4,13 +4,15 @@
 !!! WORK IN PROGRESS !!!
 
 # react-app-tutorial
-The purpose of this tutorial is to serve for a better understanding of the concepts of React and to know which libraries
-are state of the art to handle daily frontend stuff.
-To go through this tutorial without a lot of pain, you should be familiar with Javascript ES6+, React and JSX.
-This tutorial is written in Typescript, but I think most people who understand Javascript can also learn
-Typescript by doing this tutorial. No need to panic: It is just "javascript with type hints".
+The purpose of this tutorial is to serve for a better understanding of the concepts of React
+while getting familiar with some state-of-the-art libraries in 2022 used with React.
 
-### What we are going to build together
+To go through this tutorial without lots of pain, you should be familiar with Javascript ES6+, React and JSX.
+This tutorial is written in Typescript.
+I think most people who understand Javascript can arrange with TS by doing this tutorial.
+No need to panic: It is just javascript with type hints.
+
+### Approach
 Together we are going to build a single page app with an `index` and a `register user page`.
 The user registration form is going to be wired with a mocked api over http to also cover network traffic.
 The output of this tutorial is a clean and reusable framework built on top of react.
