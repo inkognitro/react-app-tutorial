@@ -15,7 +15,7 @@ No need to panic: It is just javascript with type hints.
 ### Approach
 Together we are going to build a single page app with an `index` and a `register user page`.
 The user registration form is going to be wired with a mocked api over http to also cover network traffic.
-The output of this tutorial is a clean and reusable framework built on top of react.
+The output of this tutorial is a clean and reusable framework built on top of React.
 
 ### Out of scope
 We do not cover [redux](https://redux.js.org/) in this tutorial.
