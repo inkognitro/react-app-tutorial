@@ -1,7 +1,8 @@
 [« previous](05-toaster.md) | [next »](07-collections.md)
 
 ## 6. Form
-Within this chapter we are going to create some basic form elements.
+Within this chapter we are going to create the basic form elements for the user registration form.
+We are also going to consider error messages for these form elements.
 
 ### 6.1 Learnings from the past
 In my earlier React times, I thought it was a good idea to store fetched endpoint data directly
