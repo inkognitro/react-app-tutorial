@@ -5,7 +5,7 @@
 
 # react-app-tutorial
 The purpose of this tutorial is to serve for a better understanding of the concepts of React
-while getting familiar with some state-of-the-art libraries in 2022 used with React.
+while getting familiar with some state-of-the-art libraries in 2022 used with it.
 
 To go through this tutorial without lots of pain, you should be familiar with Javascript ES6+, React and JSX.
 This tutorial is written in Typescript.
