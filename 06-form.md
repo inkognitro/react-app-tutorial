@@ -7,10 +7,12 @@ Within this chapter we are going to create some basic form elements.
 In my earlier React times, I thought it was a good idea to store fetched endpoint data directly
 as component state to finally pass it down to child components.
 This came with major drawbacks like bringing the state in the right format in every child component on every render cycle. 
-Sometimes the same computation was needed to be done multiple times. Not that good for performance reasons and
+Sometimes the same had to be done multiple times. Not that good for performance and
 [DRY](https://de.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself).
 
 It got even worse when error messages had to be displayed for some form elements.
+These error messages were saved in another state variable and had to be mapped to the right
+form element in every render process.
 I quickly learned that one should transform received endpoint data to a specific UI state
 right after the data has been fetched. So the data is ready on every render cycle and
 computation of data can be kept to a minimum while rendering the component tree.
