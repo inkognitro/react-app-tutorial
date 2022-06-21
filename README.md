@@ -28,10 +28,11 @@ Below you can see an overview of all steps of this tutorial.
 
 1. [Setup from scratch](01-setup.md) - Installation: create-react-app, linting
 2. [Authentication](02-authentication.md) - Authentication context for the current user, import paths
-3. [Routing](03-routing.md) - Prepare page layouts and the page's skeletons, mui, styled-components
-4. [Internationalization](04-i18n.md) - Translate contents, localization base, switching between two languages
-5. [Toaster](05-toaster.md) - Provide a way to trigger messages (toasts) to the website user
-6. [Form](06-form.md) - Provide basic form elements and the possibility of error enrichment (WIP)
+3. [Routing](03-routing.md) - Preparing page layouts and the page's skeletons, mui, styled-components
+4. [Internationalization](04-i18n.md) - Translating contents, localization base, switching between two languages
+5. [Toaster](05-toaster.md) - Providing a way to trigger messages (toasts) to the website user
+6. [Form](06-form.md) - Providing basic form elements and the possibility of error enrichment
+7. [Collections](07-collections.md) - Designing an interface for collection providers, implementation for arrays
 
 > :bulb: To compare the code changes between the tutorial steps,
 > just go to https://github.com/inkognitro/react-app-tutorial-code/compare and choose the specific tutorial step
@@ -78,18 +79,18 @@ This will probably change during the creation of the tutorial.
    - create toaster with MUI
    - implement toaster component in root
    - create a link to dispatch a toast at index page
-6. Form elements (**in progress**)
+6. Form elements (**done**)
    - form element type definitions
    - `TextField`, `Checkbox` and its states
    - Error message enrichment by `getStateWithModifiedFormElementMessages` function
    - Provide the user registration form skeleton
-7. Collections and Providers
+7. Collections and Providers (**done**)
    - define types
    - arrayProvider creation
    - create the Female / Male selection form element and use the arrayProvider
    - extend the `getStateWithModifiedFormElementMessages` function
    - explanation that this should also be done for `api-v1` collections
-8. ApiV1
+8. ApiV1 (**in progress**)
    - create [axios](https://axios-http.com) `http` request handler
    - create ApiV1RequestHandler
    - define `registerUserEndpoint.ts` with `shouldFail: boolean` param
