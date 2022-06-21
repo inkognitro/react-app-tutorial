@@ -19,7 +19,7 @@ As of this, I think it's a better idea to call the data itself - without any fun
 The processor of operations like fetching, creating etc. could be called "collection manager"
 or in case of just providing collections, the "collection provider".
 Java does not make a difference about these two.
-This aligns also with the naming in the React-Admin framework.
+The distinction between these two does also align with the naming in the React-Admin framework.
 
 > :bulb: Marmelab's React-Admin uses a similar pattern called
 > [data providers](https://marmelab.com/react-admin/DataProviders.html).
