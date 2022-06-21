@@ -3,8 +3,8 @@
 ## 7. Collections
 In this chapter we are going to create a provider for entity arrays which
 can be passed as a prop to table, dropdown and other components, which require a list of entities.
-We should work out a standardized for the process of fetching entities,
-no matter where they are fetched from: Either from an API endpoint or just from a simple array an more.
+We should work out a standardized way for the process of fetching entities,
+no matter where they are fetched from: Either from an API endpoint or just from a simple array or from somewhere else.
 
 ### 7.1 Understand the principles
 First, I'd like to introduce some terms of the Java world in relation to an array of objects:
