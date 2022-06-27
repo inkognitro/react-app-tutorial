@@ -94,16 +94,13 @@ This will probably change during the creation of the tutorial.
    - create the Female / Male selection form element and use the arrayProvider
    - extend the `getStateWithModifiedFormElementMessages` function
    - explanation that this should also be done for `api-v1` collections
-8. ApiV1 (**in progress**)
+8. ApiV1 (**done**)
    - create [axios](https://axios-http.com) `http` request handler
    - create ApiV1RequestHandler
    - define `registerUserEndpoint.ts` with `shouldFail: boolean` param
    - build the `useApiV1RequestHandler` hook, open for middleware
-9. Wire the User registration form
+9. Wire the User registration form (**in progress**)
    - use the `useApiV1RequestHandler` hook
    - make two buttons `registerAndSucceed` and `registerAndFail` 
    - add the toaster middleware
    - extend the `useApiV1RequestHandler` hook with `showToastMessages: boolean`
-10. Summing up
-    - What could we do better
-    - What could we do next
