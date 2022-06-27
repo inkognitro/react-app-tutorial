@@ -11,7 +11,7 @@ a http response and its handler should look like.
 Therefore, let's create a new `http` package by creating its interfaces.
 Let's define the interface for the request and its factory function first:
 
-```typescript jsx
+```typescript
 // src/packages/core/http/request.ts
 
 import { v4 } from 'uuid';
@@ -50,7 +50,7 @@ We should also be possible to cancel our requests and see such information in ou
 
 Uff this is a lot! Let's try to write these requirements down as code:
 
-```typescript jsx
+```typescript
 // src/packages/core/http/requestHandler.ts
 
 import { Request } from './request';
@@ -83,7 +83,7 @@ If `hasRequestBeenCancelled` is false and `response` is `undefined`, we know tha
 
 Don't forget to export these parts:
 
-```typescript jsx
+```typescript
 // src/packages/core/http/index.ts
 
 export * from './request';
@@ -93,12 +93,12 @@ export * from './requestHandler';
 ### 8.2 Axios request handler
 There are several libraries available which support easier http request handling in JS.
 One of these libraries is [Axios](https://www.npmjs.com/package/axios).
-As of today (year 2022) Axios is the most common library.
+As of today (year 2022), Axios is the most common library for this.
 One might argue, that the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
-could be taken as well but [older browsers do not support this](https://caniuse.com/?search=fetch).
-So let's write an axios implementation for the `RequestHandler` interface, defined before:
+could be taken as well, but [older browsers do not support this](https://caniuse.com/?search=fetch).
+So let's write an axios implementation for the `RequestHandler` interface, like we have defined before:
 
-```typescript jsx
+```typescript
 // src/packages/core/http/axiosRequestHandler.ts
 
 import axios, { AxiosRequestConfig, CancelTokenSource, Method, AxiosResponse } from 'axios';
@@ -208,15 +208,340 @@ export class AxiosRequestHandler implements RequestHandler {
 ```
 
 As you might have noticed, we don't `reject` the returned Promise in the `executeRequest` method.
-As of this, we are able to handle every case just with the `then` method which got the `RequestResponse` object injected,
-so we can save some extra lines of code whenever we want to handle a request.
+As of this, we are able to handle every case just with the `then` method, which gets the `RequestResponse` object injected.
+By ignoring the `catch` method, we can save some extra code whenever we want to handle a request.
 
 Don't forget to add the file it in the `index.ts`.
 Well done! We can use this http handler in the api version 1 package we are going to write next.
 
 :floppy_disk: [branch 08-apiv1-1](https://github.com/inkognitro/react-app-tutorial-code/compare/07-collections-2...08-apiv1-1)
 
-### 8.3 
+### 8.3 Api types
+As we had defined the http package, we now should define package to handle stuff from our
+app's http API (version 1).
+
+For our API, which currently does only exist in our thoughts yet,
+we are fully open to define the response types.
+Don't worry, we will mock an endpoint in the next chapter.
+
+Let's keep in mind the field messages, which we defined in the `form` package.
+In an ideal world these field messages would be delivered from the api itself.
+If the messages came with the response in another format, we had to write some mapping code.
+Let's go the easy way and make a field message array holding the same kind of objects like defined in the `form` package.
+Furthermore, it would be nice to have some general messages available, which have nothing todo with the request
+parameters itself. So let's go with the code below:
+
+```typescript
+// src/packages/core/api-v1/core/types.ts
+
+import { Request, RequestMethod, RequestResponse, Response } from '@packages/core/http';
+
+export type ApiV1TranslationPlaceholders = {
+    [key: string]: string;
+};
+
+export type ApiV1Translation = {
+    id: string;
+    placeholders?: ApiV1TranslationPlaceholders;
+};
+
+export type ApiV1Message = {
+    id: string;
+    severity: 'info' | 'success' | 'warning' | 'error';
+    translation: ApiV1Translation;
+};
+
+export type ApiV1FieldMessagePath = (string | number)[];
+
+export type ApiV1FieldMessage = {
+    path: ApiV1FieldMessagePath;
+    message: ApiV1Message;
+};
+
+export type ApiV1EndpointId = {
+    method: RequestMethod;
+    path: string;
+};
+
+export type ApiV1Request<Payload = any> = {
+    id: string;
+    endpointId: ApiV1EndpointId;
+    payload: Payload;
+};
+
+export type ApiV1RequestExecutionSettings<R extends ApiV1Request = any> = {
+    request: R;
+    transformer: ApiV1EndpointTransformer;
+    onProgress?: (percentage: number) => void;
+};
+
+export type ApiV1ResponseBodyBase = {
+    success: boolean;
+    fieldMessages: ApiV1FieldMessage[];
+    generalMessages: ApiV1Message[];
+};
+
+export enum ApiV1ResponseTypes {
+    SUCCESS = 'success',
+    ERROR = 'error',
+}
+
+export type ApiV1Response<T extends ApiV1ResponseTypes, Body extends object = {}> = { type: T } & Response<
+    Body & ApiV1ResponseBodyBase
+>;
+
+export type ApiV1RequestResponse<Req extends ApiV1Request = any, Res extends ApiV1Response<any> = any> = {
+    request: Req;
+    response: undefined | Res;
+    hasRequestBeenCancelled: boolean;
+};
+
+export type ApiV1EndpointTransformer<Req extends ApiV1Request = any, Res extends ApiV1Response<any> = any> = {
+    endpointId: ApiV1EndpointId;
+    createHttpRequest: (request: Req) => Request;
+    createRequestResponse: (rr: RequestResponse, request: Req) => ApiV1RequestResponse<Req, Res>;
+};
+```
+
+Like we have done in the http package, we should also handle our API requests with a request handler.
+With the `ApiV1ResponseTypes`, like in the `AuthUser` object,
+TS will be able to automatically cast the response after a `ApiV1Response.type` check.
+
+Next, let's define the `ApiV1RequestHandler` interface like so:
+
+```typescript
+// src/packages/core/api-v1/core/requestHandler.ts
+
+import { ApiV1RequestExecutionSettings } from './types';
+
+export type ApiV1RequestHandler = {
+    executeRequest: (settings: ApiV1RequestExecutionSettings) => Promise<any>;
+    cancelAllRequests: () => void;
+    cancelRequestById: (requestId: string) => void;
+};
+```
+
+Before we create our first endpoint, we should provide some factory functions of our previously defined types.
+These helper functions can be used for our endpoint definitions. Having those extracted will save us a lot of code:
+
+```typescript
+// src/packages/core/api-v1/core/factory.ts
+
+import { v4 } from 'uuid';
+import { Response, createRequest, Request } from '@packages/core/http';
+import { ApiV1EndpointId, ApiV1FieldMessage, ApiV1Message, ApiV1Request, ApiV1ResponseBodyBase } from './types';
+
+type AnyResponse = Response<{
+    success: boolean;
+    generalMessages?: ApiV1Message[];
+    fieldMessages?: ApiV1FieldMessage[];
+}>;
+
+export function createApiV1BasicResponseBody(response: Response): ApiV1ResponseBodyBase {
+    const r = response as AnyResponse;
+    return {
+        success: r.body.success,
+        fieldMessages: r.body.fieldMessages ?? [],
+        generalMessages: r.body.generalMessages ?? [],
+    };
+}
+
+type PathParams = { [paramName: string]: string };
+type QueryParams = object;
+type BodyParams = object;
+
+function createUrl(urlWithVars: string, pathParams: PathParams): string {
+    let url = urlWithVars;
+    for (let paramName in pathParams) {
+        const value = pathParams[paramName];
+        url = url.replaceAll('{' + paramName + '}', value);
+    }
+    return url;
+}
+
+type HttpRequestCreationOptions = {
+    pathParams?: PathParams;
+    queryParams?: QueryParams;
+    bodyParams?: BodyParams;
+};
+
+export function createHttpRequestFromRequest(request: ApiV1Request, options: HttpRequestCreationOptions = {}): Request {
+    return createRequest({
+        url:
+            options && options.pathParams
+                ? createUrl(request.endpointId.path, options.pathParams)
+                : request.endpointId.path,
+        method: request.endpointId.method,
+        id: request.id,
+        queryParameters: options.queryParams,
+        body: options.bodyParams,
+    });
+}
+
+export type RequestBase = Pick<ApiV1Request, 'id' | 'endpointId'>;
+export function createRequestBase(endpointId: ApiV1EndpointId): RequestBase {
+    return {
+        id: v4(),
+        endpointId: endpointId,
+    };
+}
+```
+
+### 8.4 Register user endpoint
+We are ready to define our first endpoint. Every endpoint should have a transformer.
+The transformer's task is to transform an `ApiV1Request` into a `Request` from the http request,
+as well as to transform a `RequestResponse` object from the `http` package into a `ApiV1RequestResponse` object.
+which transforms received data into the expected return type format:
+In the types we have defined before.
+
+So let's assume the register user endpoint looks like below:
+```typescript
+// src/packages/core/api-v1/auth/registerUser.ts
+
+import {
+    ApiV1RequestHandler,
+    ApiV1RequestResponse,
+    ApiV1Response,
+    createApiV1BasicResponseBody,
+    createHttpRequestFromRequest,
+    createRequestBase,
+    ApiV1EndpointTransformer,
+    ApiV1EndpointId,
+    ApiV1Request,
+    ApiV1ResponseTypes,
+} from '../core';
+import { RequestResponse, Response as HttpResponse } from '../../http';
+
+const endpointId: ApiV1EndpointId = { method: 'post', path: '/auth/register' };
+
+type AuthUser = {
+    apiKey: string;
+    user: {
+        id: string;
+        username: string;
+    };
+};
+
+type RegisterUserResponse =
+    | ApiV1Response<ApiV1ResponseTypes.SUCCESS, { data: AuthUser }>
+    | ApiV1Response<ApiV1ResponseTypes.ERROR>;
+
+type RegisterUserPayload = {
+    gender: 'f' | 'm' | 'o';
+    email: string;
+    username: string;
+    password: string;
+};
+
+type RegisterUserRequest = ApiV1Request<RegisterUserPayload>;
+
+function createRegisterUserRequest(payload: RegisterUserPayload): RegisterUserRequest {
+    return {
+        ...createRequestBase(endpointId),
+        payload,
+    };
+}
+
+const registerUserTransformer: ApiV1EndpointTransformer<RegisterUserRequest, RegisterUserResponse> = {
+    endpointId: endpointId,
+    createHttpRequest: (request) => {
+        return {
+            ...createHttpRequestFromRequest(request),
+            body: request.payload,
+        };
+    },
+    createRequestResponse: (rr: RequestResponse, request) => {
+        if (!rr.response) {
+            return {
+                request,
+                hasRequestBeenCancelled: rr.hasRequestBeenCancelled,
+                response: undefined,
+            };
+        }
+        if (rr.response.status === 201) {
+            const realSuccessResponse = rr.response as HttpResponse<{ data: AuthUser }>;
+            return {
+                request,
+                hasRequestBeenCancelled: rr.hasRequestBeenCancelled,
+                response: {
+                    ...realSuccessResponse,
+                    type: 'success',
+                    body: {
+                        ...createApiV1BasicResponseBody(realSuccessResponse),
+                        ...rr.response.body,
+                    },
+                },
+            };
+        }
+        const realErrorResponse = rr.response;
+        return {
+            request,
+            hasRequestBeenCancelled: rr.hasRequestBeenCancelled,
+            response: {
+                ...realErrorResponse,
+                type: 'error',
+                body: createApiV1BasicResponseBody(realErrorResponse),
+            },
+        };
+    },
+};
+
+export type RegisterUserRequestResponse = ApiV1RequestResponse<RegisterUserRequest, RegisterUserResponse>;
+
+export function registerUser(
+    requestHandler: ApiV1RequestHandler,
+    payload: RegisterUserPayload
+): Promise<RegisterUserRequestResponse> {
+    return requestHandler.executeRequest({
+        request: createRegisterUserRequest(payload),
+        transformer: registerUserTransformer,
+    }) as Promise<RegisterUserRequestResponse>;
+}
+```
+
+We now are able to use the mapping function with whatever `ApiV1RequestHandler` we receive.
+This is also useful for testing purposes.
+
+As usual, export the endpoint like so:
+```typescript
+// src/packages/core/api-v1/auth/index.ts
+
+export * from './registerUser';
+```
+
+> :bulb: Generally, I suggest importing properties from the third nesting level, just to keep things simple:
+> `import { Translator } from '@packages/core/i18n';`
+> 
+> In such an exceptional case like our `api-v1` package, where a lot of contexts might have similar endpoints,
+> It might be worth it to add a fourth nesting level: `import { registerUser } from '@packages/core/api-v1/auth';`
+
+### 8.5 ApiV1RequestHandler: Http implementation
+Until now, we don't have an implementation for the `ApiV1RequestHandler`.
+So let's write one, to handle an `ApiV1Request` with the `http` package like so:
+
+```typescript
+// src/packages/core/api-v1/core/httpRequestHandler.ts
+
+
+```
+
+Don't forget to export it in the `index.ts`.
+
+### 8.6 ApiV1RequestHandler: Scoped implementation
+We should also have a handler which only cancels the requests of its own scope when it is unmounted.
+Even though we are going to create the hook in the next chapter we can already prepare the
+handler itself. Let's define it like below:
+
+```typescript
+// src/packages/core/api-v1/core/scopedRequestHandler.ts
+
+```
+
+Don't forget to export it in the `index.ts`.
+
+Well done! I hope everything was clear so far. Don't worry that you could not test your code yet.
+We are going to wire things in the next chapter and will hopefully recognize that the work
+we have done in this chapter will save us a lot of code for features in the future.
 
 :floppy_disk: [branch 08-apiv1-2](https://github.com/inkognitro/react-app-tutorial-code/compare/08-apiv1-1...08-apiv1-2)
 
