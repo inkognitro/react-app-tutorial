@@ -1,8 +1,6 @@
 > Special thanks go to [easylearn schweiz ag](https://easylearn.ch). This is the company I currently work for.
 > Our managers allowed me to create parts of this tutorial at working time.
 
-!!! WORK IN PROGRESS !!!
-
 # react-app-tutorial
 The purpose of this tutorial is to serve for a better understanding of the concepts of React
 while getting familiar with some state-of-the-art libraries in 2022 used with it.
@@ -50,57 +48,3 @@ Below you can see an overview of all steps of this tutorial.
 ## Collected feedbacks
 [Sam](https://github.com/sami-akkawi):
 - **Chapter 3:** Maybe explain a bit about the external components that we are using, like: Context.Provider, Typography/Toolbar and their props like component, variant, sx
-
-## Planned Tutorial steps for now
-This will probably change during the creation of the tutorial.
-
-1. Setup react app from scratch (**done**)
-   - installation with create-react-app
-   - linting
-2. Auth (**done**)
-   - packages folder
-   - define current user types
-   - define `useCurrentUser` hook
-   - define `CurrentUserRepository` and its hook
-   - adjust navigation (add username when current user is logged in)
-3. Routing (**done**)
-   - routing with react-router-dom
-   - install material ui
-   - page layout
-   - navigation
-   - index page
-   - register user page
-4. Translator, i18n (**done**)
-   - setup translation with `i18next`
-   - `useTranslator` hook
-   - `Translation` component with `ReactNode` placeholders
-   - setup context
-5. Toaster (**done**)
-   - **Utils**: `Message` type and `Message(s)` component
-   - define toaster types
-   - define `SubscribableToaster` class
-   - setup context
-   - create toaster with MUI
-   - implement toaster component in root
-   - create a link to dispatch a toast at index page
-6. Form elements (**done**)
-   - form element type definitions
-   - `TextField`, `Checkbox` and its states
-   - Error message enrichment by `getStateWithModifiedFormElementMessages` function
-   - Provide the user registration form skeleton
-7. Collections and Providers (**done**)
-   - define types
-   - arrayProvider creation
-   - create the Female / Male selection form element and use the arrayProvider
-   - extend the `getStateWithModifiedFormElementMessages` function
-   - explanation that this should also be done for `api-v1` collections
-8. ApiV1 (**done**)
-   - create [axios](https://axios-http.com) `http` request handler
-   - create ApiV1RequestHandler
-   - define `registerUserEndpoint.ts` with `shouldFail: boolean` param
-   - build the `useApiV1RequestHandler` hook, open for middleware
-9. Wire the User registration form (**in progress**)
-   - use the `useApiV1RequestHandler` hook
-   - make two buttons `registerAndSucceed` and `registerAndFail` 
-   - add the toaster middleware
-   - extend the `useApiV1RequestHandler` hook with `showToastMessages: boolean`
