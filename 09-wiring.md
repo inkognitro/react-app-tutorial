@@ -126,7 +126,7 @@ Let's also add a new script in the `package.json` by enhancing the `scripts` sec
 }
 ```
 
-Cool! You now should be able to run the script and reach the mock API endpoint e.g. by [Postman](https://www.postman.com/).
+Cool! We are now able to run the script and reach the mock API endpoint e.g. by [Postman](https://www.postman.com/).
 
 ### 9.2 Provide the ApiV1RequestHandler
 TBD
