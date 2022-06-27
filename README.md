@@ -35,7 +35,7 @@ Below you can see an overview of all steps of this tutorial.
 5. [Toaster](05-toaster.md) - Providing a way to trigger messages (toasts) to the website user
 6. [Form](06-form.md) - Providing basic form elements and the possibility of error enrichment
 7. [Collections](07-collections.md) - Designing an interface for collection providers, implementation for arrays
-8. [ApiV1](08-apiv1.md) - Standardized http request handling, provide the first API version 1 endpoint
+8. [ApiV1](08-apiv1.md) - Standardized http request handling, provide the first API version 1 endpoint (WIP)
 
 > :bulb: To compare the code changes between the tutorial steps,
 > just go to https://github.com/inkognitro/react-app-tutorial-code/compare and choose the specific tutorial step
