@@ -325,10 +325,10 @@ submit the form: The field error messages, which come from the API endpoint, are
 So far so good, but... wasn't there something called "general messages" delivered from the API?
 Let's make these general messages visible by automatically dispatching a toast message for each of them.
 
+:floppy_disk: [branch 09-wiring-1](https://github.com/inkognitro/react-app-tutorial-code/compare/08-apiv1-2...09-wiring-1)
+
 ### 9.5 Add the toaster middleware
 
-
-:floppy_disk: [branch 09-wiring-1](https://github.com/inkognitro/react-app-tutorial-code/compare/08-apiv1-2...09-wiring-1)
 
 :floppy_disk: [branch 09-wiring-2](https://github.com/inkognitro/react-app-tutorial-code/compare/09-wiring-1...09-wiring-2)
 
