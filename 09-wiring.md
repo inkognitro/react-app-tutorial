@@ -322,13 +322,217 @@ export const RegisterPage: FC = () => {
 Yay! Start the mockApi and the App, open the registration form in the browser, skip some form elements and
 submit the form: The field error messages, which come from the API endpoint, are should show right after the form elements.
 
-So far so good, but... wasn't there something called "general messages" delivered from the API?
+So far so good, but... wasn't there something called "general messages" delivered from the API endpoint?
 Let's make these general messages visible by automatically dispatching a toast message for each of them.
 
 :floppy_disk: [branch 09-wiring-1](https://github.com/inkognitro/react-app-tutorial-code/compare/08-apiv1-2...09-wiring-1)
 
-### 9.5 Add the toaster middleware
+### 9.5 Support any request handler middleware
+To show the general messages which could be delivered from each API endpoint response we need to write something like
+a request handler middleware which triggers our toaster. Let's define an interface for it:
 
+```typescript
+// src/packages/core/api-v1/core/scopedRequestHandler.ts
+
+export type ApiV1RequestHandlerMiddleware = {
+    onRequest?: (r: ApiV1Request) => void;
+    onRequestResponse?: (rr: ApiV1RequestResponse) => void;
+};
+```
+
+Next let's support middlewares in the ScopedApiV1RequestHandler, so that the class looks like so:
+```typescript
+// src/packages/core/api-v1/core/scopedRequestHandler.ts
+
+export class ScopedApiV1RequestHandler implements ApiV1RequestHandler {
+    private readonly middlewares: ApiV1RequestHandlerMiddleware[];
+    private readonly requestHandler: ApiV1RequestHandler;
+    private runningRequestIds: string[];
+
+    constructor(requestHandler: ApiV1RequestHandler) {
+        this.middlewares = [];
+        this.requestHandler = requestHandler;
+        this.runningRequestIds = [];
+        this.createSeparated = this.createSeparated.bind(this);
+        this.executeRequest = this.executeRequest.bind(this);
+        this.cancelAllRequests = this.cancelAllRequests.bind(this);
+        this.cancelRequestById = this.cancelRequestById.bind(this);
+    }
+
+    public createSeparated() {
+        return new ScopedApiV1RequestHandler(this.requestHandler);
+    }
+
+    public addMiddleware(middleware: ApiV1RequestHandlerMiddleware) {
+        this.middlewares.push(middleware);
+    }
+
+    public executeRequest(settings: ApiV1RequestExecutionSettings): Promise<ApiV1RequestResponse> {
+        const that = this;
+        return new Promise((resolve) => {
+            that.runningRequestIds.push(settings.request.id);
+            that.middlewares.forEach((m) => {
+                if (m.onRequest) {
+                    m.onRequest(settings.request);
+                }
+            });
+            that.requestHandler.executeRequest(settings).then((rr): void => {
+                that.runningRequestIds = that.runningRequestIds.filter(
+                    (requestId) => settings.request.id !== requestId
+                );
+                that.middlewares.forEach((m) => {
+                    if (m.onRequestResponse) {
+                        m.onRequestResponse(rr);
+                    }
+                });
+                resolve(rr);
+            });
+        });
+    }
+
+    public cancelAllRequests() {
+        this.runningRequestIds.forEach((requestId) => this.requestHandler.cancelRequestById(requestId));
+    }
+
+    public cancelRequestById(requestId: string) {
+        if (!this.runningRequestIds.includes(requestId)) {
+            return;
+        }
+        this.requestHandler.cancelRequestById(requestId);
+    }
+}
+```
+
+### 9.6 Provide the toaster middleware
+
+
+```typescript
+// src/packages/core/api-v1/core/toasterMiddleware.ts
+
+import { createContext, useContext } from 'react';
+import { Toaster } from '@packages/core/toaster';
+import { Translator } from '@packages/core/i18n';
+import { ApiV1RequestHandlerMiddleware } from './scopedRequestHandler';
+import { ApiV1Message, ApiV1RequestResponse } from './types';
+
+export class ApiV1ToasterMiddleware implements ApiV1RequestHandlerMiddleware {
+    private readonly toaster: Toaster;
+    private readonly translator: Translator;
+
+    constructor(toaster: Toaster, translator: Translator) {
+        this.toaster = toaster;
+        this.translator = translator;
+    }
+
+    onRequestResponse(rr: ApiV1RequestResponse) {
+        if (rr.hasRequestBeenCancelled) {
+            return;
+        }
+        if (!rr.response) {
+            this.toaster.showMessage({
+                severity: 'error',
+                content: this.translator.t('core.util.connectionToServerFailed'),
+            });
+            return;
+        }
+        rr.response.body.generalMessages.map((m: ApiV1Message) =>
+            this.toaster.showMessage({
+                id: m.id,
+                severity: m.severity,
+                content: this.translator.t(m.translation.id, m.translation.placeholders),
+            })
+        );
+    }
+}
+
+const toasterMiddlewareContext = createContext<null | ApiV1ToasterMiddleware>(null);
+export const ApiV1ToasterMiddlewareProvider = toasterMiddlewareContext.Provider;
+
+export function useNullableApiV1ToasterMiddleware(): null | ApiV1ToasterMiddleware {
+    return useContext(toasterMiddlewareContext);
+}
+```
+
+Don't forget to export it in the `index.ts` and to provide the `ApiV1ToasterMiddleware` in the `<ServiceProvider>`!
+
+Furthermore, we need to support the translation for the failed connection, so let's support
+this translation key by adding it in the translation files like so:
+
+
+```javascript
+// src/components/translations/deCH.json
+
+"core": {
+    "util": {
+        "connectionToServerFailed": "Verbindung zum Server konnte nicht hergestellt werden."
+    },
+    // other translations...
+}
+```
+
+and
+```javascript
+// src/components/translations/enUS.json
+
+"core": {
+    "util": {
+        "connectionToServerFailed": "Connection to server failed."
+    },
+    // other translations...
+}
+```
+
+Cool! Now that we have the toaster middleware available, let's use it in the next step.
+
+### 9.6 Middleware in the `useApiV1RequestHandler` hook
+Whenever we use the ApiV1RequestHandler,
+it would be nice to configure if toast messages from the responses should be shown or not.
+
+So let's enhance the `useApiV1RequestHandler` hook, that the code looks like below:
+```typescript
+// src/packages/core/api-v1/core/scopedRequestHandler.ts
+
+// other stuff...
+
+type UseApiV1RequestHandlerConfig = {
+    showToasts: boolean;
+};
+
+const defaultUseApiV1RequestHandlerConfig: UseApiV1RequestHandlerConfig = {
+    showToasts: true,
+};
+
+export function useApiV1RequestHandler(
+    config: UseApiV1RequestHandlerConfig = defaultUseApiV1RequestHandlerConfig
+): ApiV1RequestHandler {
+    const toasterMiddleware = useNullableApiV1ToasterMiddleware();
+    const requestHandler = useContext(scopedApiV1RequestHandlerContext);
+    if (!requestHandler) {
+        throw new Error('no ScopedApiV1RequestHandler was provided');
+    }
+    const requestHandlerRef = useRef<ScopedApiV1RequestHandler | null>(null);
+    if (!requestHandlerRef.current) {
+        const separatedRequestHandler = requestHandler.createSeparated();
+        if (toasterMiddleware && config.showToasts) {
+            separatedRequestHandler.addMiddleware(toasterMiddleware);
+        }
+        requestHandlerRef.current = separatedRequestHandler;
+    }
+    useEffect(() => {
+        return () => {
+            if (requestHandlerRef.current) {
+                requestHandlerRef.current.cancelAllRequests();
+            }
+        };
+    }, []);
+    return requestHandlerRef.current;
+}
+```
+
+Congratulations! If you submit the form now, after skipping some form elements, an
+error toast will automatically be shown, because the API endpoint listed it in the `generalMessages` response body property.
+If you didn't want to see any general message toast, you could just configure the hook by using it like
+`useApiV1RequestHandler({ showToasts: false });`.
 
 :floppy_disk: [branch 09-wiring-2](https://github.com/inkognitro/react-app-tutorial-code/compare/09-wiring-1...09-wiring-2)
 
