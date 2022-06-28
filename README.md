@@ -1,4 +1,4 @@
-> Special thanks go to [easylearn schweiz ag](https://easylearn.ch). This is the company I currently work for.
+> :raised_hands: Special thanks go to [easylearn schweiz ag](https://easylearn.ch). This is the company I currently work for.
 > Our managers allowed me to create parts of this tutorial at working time.
 
 # react-app-tutorial
