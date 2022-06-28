@@ -1,6 +1,5 @@
 [« previous](08-apiv1.md)
 
-## 10. Final words
 Congratulations. You made it this far.
 
 I hope you didn't just jump at the end :wink:
