@@ -1,4 +1,4 @@
-[« previous](08-apiv1.md)
+[« previous](08-apiv1.md) | [final words »](10-finalwords.md)
 
 ## 9. Wiring
 In this chapter we are going to write a mocked api with [Express](https://www.npmjs.com/package/express)
@@ -536,4 +536,4 @@ If you didn't want to see any general message toast, you could just configure th
 
 :floppy_disk: [branch 09-wiring-2](https://github.com/inkognitro/react-app-tutorial-code/compare/09-wiring-1...09-wiring-2)
 
-[« previous](08-apiv1.md)
+[« previous](08-apiv1.md) | [final words »](10-finalwords.md)
