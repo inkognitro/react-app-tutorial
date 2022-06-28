@@ -34,7 +34,7 @@ Below you can see an overview of all steps of this tutorial.
 6. [Form](06-form.md) - Providing basic form elements and the possibility of error enrichment
 7. [Collections](07-collections.md) - Designing an interface for collection providers, implementation for arrays
 8. [ApiV1](08-apiv1.md) - Standardized http request handling, provide the first API version 1 endpoint
-8. [Wiring](09-wiring.md) - Wiring the registration form with the mocked http endpoint, form element error messages (WIP)
+8. [Wiring](09-wiring.md) - Wiring the registration form with the mocked http endpoint, form element error messages
 
 > :bulb: To compare the code changes between the tutorial steps,
 > just go to https://github.com/inkognitro/react-app-tutorial-code/compare and choose the specific tutorial step
