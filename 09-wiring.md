@@ -127,9 +127,206 @@ Let's also add a new script in the `package.json` by enhancing the `scripts` sec
 ```
 
 Cool! We are now able to run the script and reach the mock API endpoint e.g. by [Postman](https://www.postman.com/).
+Before we go to the next step, we should support the translations which could be delivered from the API by adding
+following sections in the translations files:
 
-### 9.2 Provide the ApiV1RequestHandler
-TBD
+```javascript
+// src/components/translations/deCH.json
+
+"api": {
+    "v1": {
+        "formErrors": "Ihre Formulardaten sind fehlerhaft!",
+        "invalidValue": "Ungültiger Wert"
+    }
+},
+```
+
+and
+```javascript
+// src/components/translations/enUS.json
+
+"api": {
+    "v1": {
+        "formErrors": "You have some errors in your form!",
+        "invalidValue": "Invalid value"
+    }
+},
+```
+
+### 9.3 Provide the ApiV1RequestHandler
+To use the `ApiV1RequestHandler` we need to provide it in the `ServiceContainer` like we did also for other services:
+
+```typescript jsx
+// src/ServiceContainer.tsx
+
+// Replace following import statement:
+import React, { FC, MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from 'react';
+
+// Add following import statements:
+import { AxiosRequestHandler } from '@packages/core/http';
+import {
+    HttpApiV1RequestHandler,
+    ScopedApiV1RequestHandler,
+    ScopedApiV1RequestHandlerProvider,
+} from '@packages/core/api-v1/core';
+
+
+// Add the ApiV1RequestHandler factory like so:
+function createScopedApiV1RequestHandler(currentUserStateRef: MutableRefObject<AuthUser>): ScopedApiV1RequestHandler {
+    const httpRequestHandler = new AxiosRequestHandler();
+    const apiV1BaseUrl = 'http://localhost:9000/api/v1';
+    const httpApiV1RequestHandler = new HttpApiV1RequestHandler(
+        httpRequestHandler,
+        () => {
+            return currentUserStateRef.current.type === 'authenticated' ? currentUserStateRef.current.apiKey : null;
+        },
+        apiV1BaseUrl
+    );
+    return new ScopedApiV1RequestHandler(httpApiV1RequestHandler);
+}
+
+// Insert following code in the top of the ServiceProvider component:
+const currentUserStateRef = useRef<AuthUser>(currentUserState);
+useEffect(() => {
+    currentUserStateRef.current = currentUserState;
+}, [currentUserState, currentUserStateRef]);
+
+// Insert the following code before the return statement of the ServiceProvider component:
+const apiV1RequestHandlerRef = useRef(createScopedApiV1RequestHandler(currentUserStateRef));
+
+// Provide the ScopedApiV1RequestHandler with its Provider like so:
+return (
+    <ScopedApiV1RequestHandlerProvider value={apiV1RequestHandlerRef.current}>
+        {/* Other service providers... */}
+    </ScopedApiV1RequestHandlerProvider>
+);
+```
+
+### 9.4 Wire the user registration form
+To be able to enrich our form elements with messages, we need to define a `pathPart` for those.
+It is important that we define the same `pathPart` on the specific form elements
+which is delivered from the API field message, otherwise the field message will
+not be filled in the state of the specific form element.
+Let's define these `pathParts` this in the `RegistrationFormState` factory function:
+
+````typescript jsx
+// src/pages/auth/RegisterPage.tsx
+
+function createRegistrationFormState(): RegistrationFormState {
+    return {
+        genderSelection: createSingleSelectionState({ pathPart: ['gender'] }),
+        usernameField: createTextFieldState({ pathPart: ['username'] }),
+        emailField: createTextFieldState({ pathPart: ['email'] }),
+        passwordField: createTextFieldState({ pathPart: ['password'] }),
+        agreeCheckbox: createCheckboxState(),
+    };
+}
+````
+
+Next, let's add the logic to communicate with the endpoint and to enrich the `RegistrationFormState`
+with the API field messages after we received the response.
+As you might have seen: If there are no errors in the registration form,
+we directly receive the access token and user data of the newly registered user.
+It would be nice to have the user logged in and be redirected to the start page after a successful registration process.
+With all these requirements, we need to take following action:
+
+````typescript jsx
+// src/pages/auth/RegisterPage.tsx
+
+// Replace the i18n imports like so:
+import { T, useTranslator } from '@packages/core/i18n';
+
+// Add following import statements:
+import { ApiV1ResponseTypes, useApiV1RequestHandler } from '@packages/core/api-v1/core';
+import { registerUser } from '@packages/core/api-v1/auth';
+import { useCurrentUserRepository } from '@packages/core/auth';
+import { useNavigate } from 'react-router-dom';
+
+// Add the "onSubmit" callback to the RegistrationFormProps, so that the props definition looks like so:
+type RegistrationFormProps = {
+    data: RegistrationFormState;
+    onChangeData: (data: RegistrationFormState) => void;
+    onSubmit: () => void; // Don't forget to implement it in the RegistrationForm: <Form onSubmit={props.onSubmit}>
+};
+
+// Make the RegisterPage component look like:
+export const RegisterPage: FC = () => {
+    const { t } = useTranslator();
+    const [registrationForm, setRegistrationForm] = useState(createRegistrationFormState());
+    const apiV1RequestHandler = useApiV1RequestHandler();
+    const currentUserRepo = useCurrentUserRepository();
+    const navigate = useNavigate();
+    function canFormBeSubmitted(): boolean {
+        return registrationForm.agreeCheckbox.value;
+    }
+    function submitForm() {
+        if (!canFormBeSubmitted()) {
+            return;
+        }
+        const newRegistrationFormState = getStateWithEnrichedFormElementStates(registrationForm, {
+            messages: [],
+            prefixPath: [],
+        });
+        setRegistrationForm(newRegistrationFormState);
+        registerUser(apiV1RequestHandler, {
+            username: registrationForm.usernameField.value,
+            email: registrationForm.emailField.value,
+            gender: registrationForm.genderSelection.chosenOption?.data as GenderId,
+            password: registrationForm.passwordField.value,
+        }).then((rr) => {
+            if (!rr.response) {
+                return;
+            }
+            if (rr.response.type !== ApiV1ResponseTypes.SUCCESS) {
+                const newRegistrationFormState = getStateWithEnrichedFormElementStates(registrationForm, {
+                    messages: rr.response.body.fieldMessages,
+                    prefixPath: [],
+                });
+                setRegistrationForm(newRegistrationFormState);
+                return;
+            }
+            currentUserRepo.setCurrentUser({
+                type: 'authenticated',
+                apiKey: rr.response.body.data.apiKey,
+                data: {
+                    id: rr.response.body.data.user.id,
+                    username: rr.response.body.data.user.username,
+                },
+            });
+            navigate('/');
+        });
+    }
+    return (
+        <NavBarPage title={t('pages.registerPage.title')}>
+            <Typography component="h1" variant="h5">
+                {t('pages.registerPage.title')}
+            </Typography>
+            <RegistrationForm
+                data={registrationForm}
+                onChangeData={(data) => setRegistrationForm(data)}
+                onSubmit={() => submitForm()}
+            />
+            <Button
+                margin="dense"
+                variant="outlined"
+                color="primary"
+                disabled={!canFormBeSubmitted()}
+                onClick={() => submitForm()}>
+                {t('pages.registerPage.signUp')}
+            </Button>
+        </NavBarPage>
+    );
+};
+````
+
+Yay! Start the mockApi and the App, open the registration form in the browser, skip some form elements and
+submit the form: The field error messages, which come from the API endpoint, are should show right after the form elements.
+
+So far so good, but... wasn't there something called "general messages" delivered from the API?
+Let's make these general messages visible by automatically dispatching a toast message for each of them.
+
+### 9.5 Add the toaster middleware
+
 
 :floppy_disk: [branch 09-wiring-1](https://github.com/inkognitro/react-app-tutorial-code/compare/08-apiv1-2...09-wiring-1)
 

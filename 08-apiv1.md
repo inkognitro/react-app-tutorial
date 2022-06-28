@@ -643,6 +643,13 @@ export class ScopedApiV1RequestHandler implements ApiV1RequestHandler {
         this.requestHandler.cancelRequestById(requestId);
     }
 }
+```
+
+Next let's add a hook in the same file so that we can use the ScopedApiV1RequestHandler in our components.
+As mentioned before, we should cancel all running requests on component unmount:
+
+```typescript
+// src/packages/core/api-v1/core/scopedRequestHandler.ts
 
 const scopedApiV1RequestHandlerContext = createContext<null | ScopedApiV1RequestHandler>(null);
 export const ScopedApiV1RequestHandlerProvider = scopedApiV1RequestHandlerContext.Provider;
