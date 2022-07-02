@@ -204,9 +204,9 @@ return (
 ### 9.4 Wire the user registration form
 To be able to enrich our form elements with messages, we need to define a `pathPart` for those.
 It is important that we define the same `pathPart` on the specific form elements
-which is delivered from the API field message, otherwise the field message will
-not be filled in the state of the specific form element.
-Let's define these `pathParts` this in the `RegistrationFormState` factory function:
+which is delivered from the API field message, otherwise the form element state is not going to be 
+enriched with the specific field message.
+Let's define these `pathParts` in the `RegistrationFormState` factory function:
 
 ````typescript jsx
 // src/pages/auth/RegisterPage.tsx
@@ -224,10 +224,10 @@ function createRegistrationFormState(): RegistrationFormState {
 
 Next, let's add the logic to communicate with the endpoint and to enrich the `RegistrationFormState`
 with the API field messages after we received the response.
-As you might have seen: If there are no errors in the registration form,
+As you might have seen in the mockApi code: If there are no errors in the registration form,
 we directly receive the access token and user data of the newly registered user.
-It would be nice to have the user logged in and be redirected to the start page after a successful registration process.
-With all these requirements, we need to take following action:
+It would be nice to have the user logged in and redirected to the start page when a successful registration was made.
+With all these requirements, we need to make the registration form look like so:
 
 ````typescript jsx
 // src/pages/auth/RegisterPage.tsx
@@ -318,17 +318,18 @@ export const RegisterPage: FC = () => {
 };
 ````
 
-Yay! Start the mockApi and the App, open the registration form in the browser, skip some form elements and
-submit the form: The field error messages, which come from the API endpoint, are should show right after the form elements.
+Yay! Start the mockApi and the App if not done yet.
+Then open the registration form in the browser, skip some form elements and submit the form.
+The field error messages delivered with the API endpoint response, should show up at the form elements.
 
 So far so good, but... wasn't there something called "general messages" delivered from the API endpoint?
-Let's make these general messages visible by automatically dispatching a toast message for each of them.
+Let's make these general messages dispatching a toast message for each of them.
 
 :floppy_disk: [branch 09-wiring-1](https://github.com/inkognitro/react-app-tutorial-code/compare/08-apiv1-2...09-wiring-1)
 
 ### 9.5 Support any request handler middleware
-To show the general messages which could be delivered from each API endpoint response we need to write something like
-a request handler middleware which triggers our toaster. Let's define an interface for it:
+To show the general messages of an API endpoint response, we need to write something like
+a toaster middleware for the request handler. Let's try to define an interface for it:
 
 ```typescript
 // src/packages/core/api-v1/core/scopedRequestHandler.ts
@@ -339,7 +340,7 @@ export type ApiV1RequestHandlerMiddleware = {
 };
 ```
 
-Next let's support middlewares in the ScopedApiV1RequestHandler, so that the class looks like so:
+Next let's support middlewares in the `ScopedApiV1RequestHandler`, so that the class looks like below:
 ```typescript
 // src/packages/core/api-v1/core/scopedRequestHandler.ts
 
@@ -403,7 +404,10 @@ export class ScopedApiV1RequestHandler implements ApiV1RequestHandler {
 ```
 
 ### 9.6 Provide the toaster middleware
-
+Now that the `ScopedApiV1RequestHandler` supports middlewares, we can write a middleware for it, which
+handles the `ApiV1RequestResponse` and dispatches toast messages when required.
+In case of a lost connection, the user should probably be informed about that.
+The middleware fulfilling these requirements could look like so:
 
 ```typescript
 // src/packages/core/api-v1/core/toasterMiddleware.ts
@@ -454,8 +458,8 @@ export function useNullableApiV1ToasterMiddleware(): null | ApiV1ToasterMiddlewa
 
 Don't forget to export it in the `index.ts` and to provide the `ApiV1ToasterMiddleware` in the `<ServiceProvider>`!
 
-Furthermore, we need to support the translation for the failed connection, so let's support
-this translation key by adding it in the translation files like so:
+Furthermore, we need to support the translation for the failed connection.
+Just add these translation keys like so:
 
 
 ```javascript
@@ -483,11 +487,14 @@ and
 
 Cool! Now that we have the toaster middleware available, let's use it in the next step.
 
-### 9.6 Middleware in the `useApiV1RequestHandler` hook
+### 9.6 Add the middleware in `useApiV1RequestHandler`
 Whenever we use the ApiV1RequestHandler,
-it would be nice to configure if toast messages from the responses should be shown or not.
+it would be nice to configure whether toast messages from the responses should be shown or not.
 
-So let's enhance the `useApiV1RequestHandler` hook, that the code looks like below:
+Despite I am not a fan of implicitly doing things, I think it makes sense to show the toasts
+when no hook configuration was used with the hook.
+
+See the code below, which enhances the `useApiV1RequestHandler` hook, to better understand what I mean:
 ```typescript
 // src/packages/core/api-v1/core/scopedRequestHandler.ts
 
@@ -528,8 +535,9 @@ export function useApiV1RequestHandler(
 }
 ```
 
-Congratulations! If you submit the form now, after skipping some form elements, an
-error toast will automatically be shown, because the API endpoint listed it in the `generalMessages` response body property.
+Congratulations! If you submit the form with skipped form elements, an
+error toast will automatically be shown, because the API endpoint listed it in the `generalMessages` property
+of the response body.
 If you didn't want to see any general message toast, you could just configure the hook by using it like
 `useApiV1RequestHandler({ showToasts: false });`.
 
