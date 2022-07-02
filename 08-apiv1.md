@@ -1,8 +1,8 @@
 [« previous](07-collections.md) | [next »](09-wiring.md)
 
 ## 8. ApiV1
-In this chapter we are going to build a http package to be able to handle http requests in a standardized way.
-Then we are going to provide the api version 1 package, which does require this http adapter.
+In this chapter we are going to build a http package to handle http requests in a standardized way.
+This enables us to provide an api version 1 package which is based on that http package.
 
 ### 8.1 A standardized way to handle http requests
 To fire some http requests, we should define how a http request,

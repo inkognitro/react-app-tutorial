@@ -222,7 +222,7 @@ export * from './arrayProvider';
 :floppy_disk: [branch 07-collections-1](https://github.com/inkognitro/react-app-tutorial-code/compare/06-form-2...07-collections-1)
 
 ### 7.4 Create a selection form component
-Before we can profit from the advantages of our `ArrayCollectionProvider` we must create a component
+Before we can benefit from the advantages of our `ArrayCollectionProvider` we must create a component
 which requires a `CollectionProvider` property to work with a collection.
 I think a dropdown component is a common use case for that.
 
@@ -381,7 +381,7 @@ and
 ```
 
 ### 7.5 Create a gender selection in the user registration form
-Now, we are able to profit from the work we have done so far.
+Now, we are able to benefit from the work we have done so far.
 Let's create a gender selection in the user registration form with no effort.
 
 ```typescript jsx

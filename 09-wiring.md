@@ -2,9 +2,8 @@
 
 ## 9. Wiring
 In this chapter we are going to write a mocked api with [Express](https://www.npmjs.com/package/express)
-for the register user endpoint.
-In a next step we wire the form with this endpoint and take the response's field message
-for form element error enrichment.
+for the register user endpoint. In a next step we wire the form with this endpoint and take the
+response's field message for form element error enrichment.
 
 ### 9.1 Provide a mock API
 Before we can wire our user registration form, we have to create an API endpoint for it.
