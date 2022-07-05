@@ -24,8 +24,6 @@ The distinction between these two does also align with the naming in the React-A
 > :bulb: Marmelab's React-Admin uses a similar pattern called
 > [data providers](https://marmelab.com/react-admin/DataProviders.html).
 > Even creation, updating and deletion of one or multiple entities is supported.
->
-> `https://www.javatpoint.com/collections-in-java, 2022-06-21`
 
 I suggest only supporting the fetch of entities, with filter, sorting and pagination params
 by such a "collection provider". As of my experience in frontend programming, writing and storing data is often an 
