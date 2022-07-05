@@ -400,11 +400,10 @@ npm install @mui/material @mui/icons-material --save
 ```
 
 Material UI comes with the [emotion](https://emotion.sh/docs/introduction) library by default for adding custom css.
-These two libraries are almost the same.
 In this tutorial, we go with [styled-components](https://styled-components.com/) instead,
 to gain more experience about what is going on under the hood with webpack and TS.
 
-To have a comparison of these two libraries, just have a look at
+These two libraries are almost the same. To have a comparison of these two libraries, just have a look at
 [this LogRocket article](https://blog.logrocket.com/styled-components-vs-emotion-for-handling-css/).
 With [MUI](https://mui.com/) we need to switch its styled-engine to [styled-components](https://styled-components.com/).
 
