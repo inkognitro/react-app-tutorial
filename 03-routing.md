@@ -490,7 +490,7 @@ export const BlankPage: FC<BlankPageProps> = (props) => {
 };
 ```
 
-### 3.11 Provide the theme
+### 3.10 Provide the theme
 To be able to access the theme we should create one and provide it like so:
 
 ```typescript jsx
@@ -528,7 +528,7 @@ return (
 );
 ```
 
-### 3.10 Provide reusable link components
+### 3.11 Provide reusable link components
 We should provide two different link components. Both should play well with the props of `@mui/material`'s link component.
 One link component should have the functionality of `react-router-dom`'s `Link` to route to another url.
 With the other link component it should be possible to only execute stuff by the `onClick` property without routing.
@@ -576,7 +576,7 @@ As always, we leak our public available components of the package with an `index
 export * from './Link';
 ```
 
-### 3.11 Prevent our navigation from causing eye cancer
+### 3.12 Prevent our navigation from causing eye cancer
 Now that we have MUI installed, we can use its components and provide a better
 nav bar with no effort.
 
