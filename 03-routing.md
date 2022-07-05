@@ -223,7 +223,7 @@ export const IndexPage: FC = () => {
 
 The `RegisterPage`, within we are going to build the user registration form:
 ```typescript jsx
-// src/pages/auth/Register.tsx
+// src/pages/auth/RegisterPage.tsx
 
 import { FC } from 'react';
 import { NavBarPage } from '@components/page-layout';
@@ -371,7 +371,7 @@ function App() {
     const currentUserRepo = useCurrentUserRepository();
     useEffect(() => {
         currentUserRepo.init();
-    }, []);
+    }, [currentUserRepo]);
     return <AppRoutes />;
 }
 
