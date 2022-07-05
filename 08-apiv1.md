@@ -217,14 +217,11 @@ Well done! We can use this http handler in the api version 1 package we are goin
 :floppy_disk: [branch 08-apiv1-1](https://github.com/inkognitro/react-app-tutorial-code/compare/07-collections-2...08-apiv1-1)
 
 ### 8.3 Api types
-As we had defined the http package, we now should define package to handle stuff from our
-app's http API (version 1).
+Like the `http` package, we should also define a package which handles stuff of our http API version 1.
+Don't worry, we'll mock an endpoint in the next chapter. For now, we are going to define how endpoints
+should be structured.
 
-For our API, which currently does only exist in our thoughts yet,
-we are fully open to define the response types.
-Don't worry, we will mock an endpoint in the next chapter.
-
-Let's keep in mind the field messages, which we defined in the `form` package.
+Let's keep in mind the field messages, which we had defined in the `form` package.
 In an ideal world these field messages would be delivered from the api itself.
 If the messages came with the response in another format, we had to write some mapping code.
 Let's go the easy way and make a field message array holding the same kind of objects like defined in the `form` package.
