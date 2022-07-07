@@ -153,10 +153,10 @@ and
 ```
 
 ### 9.3 Provide the ApiV1RequestHandler
-To use the `ApiV1RequestHandler` we need to provide it in the `ServiceContainer` like we did also for other services:
+To use the `ApiV1RequestHandler` we need to provide it in the `ServiceProvider` like we did also for other services:
 
 ```typescript jsx
-// src/ServiceContainer.tsx
+// src/ServiceProvider.tsx
 
 // Replace following import statement:
 import React, { FC, MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from 'react';
