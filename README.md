@@ -44,7 +44,3 @@ Below you can see an overview of all steps of this tutorial.
 > Feel free to use the code for your own project. It's available under the MIT license :wink:
 
 [Let's start »](01-setup.md)
-
-## Collected feedbacks
-[Sam](https://github.com/sami-akkawi):
-- **Chapter 3:** Maybe explain a bit about the external components that we are using, like: Context.Provider, Typography/Toolbar and their props like component, variant, sx
