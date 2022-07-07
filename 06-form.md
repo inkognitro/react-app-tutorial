@@ -8,8 +8,8 @@ We are also going to consider error messages for these form elements.
 In my earlier React times, I thought it was a good idea to store fetched endpoint data directly
 as component state to finally pass it down to child components.
 This came with major drawbacks like bringing the state in the right format in every child component on every render cycle. 
-Sometimes the same had to be done multiple times. Not that good for performance and
-[DRY](https://de.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself).
+Sometimes the same computation had to be done even multiple times. Not that good for performance and the
+[DRY](https://de.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself) principle.
 
 It got even worse when error messages had to be displayed for some form elements.
 These error messages were saved in another state variable and had to be mapped to the right
@@ -20,8 +20,8 @@ computation of data can be kept to a minimum while rendering the component tree.
 
 This goes also hand in hand with the
 [low coupling principle](https://stackoverflow.com/questions/14000762/what-does-low-in-coupling-and-high-in-cohesion-mean):
-Once the API changes, we only need to change the transformer function which takes in delivered data from the API
-and outputs the corresponding UI state.
+If the API changes for any reason, we only need to change the transformer function which takes in the
+delivered data from the API and outputs the corresponding UI state.
 
 ### 6.2 Defining the `TextFieldState`
 According to our learnings in the past it would be nice to have a state for every form element.
@@ -308,8 +308,8 @@ I suggest using a `data` and `onChangeData` property:
 ```typescript jsx
 // src/packages/core/form/TextField.tsx
 
-import { TextFieldState } from './formElementState';
 import React, { CSSProperties, FC } from 'react';
+import { TextFieldState } from './formElementState';
 import { TextField as MuiTextField, InputProps, FormControl } from '@mui/material';
 import { Messages } from './Messages';
 
@@ -384,7 +384,7 @@ Let's do the same for the checkbox form element:
 // src/packages/core/form/Checkbox.tsx
 
 import React, { FC, ReactNode } from 'react';
-import { CheckboxState } from '@packages/core/form';
+import { CheckboxState } from './formElementState';
 import { Checkbox as MuiCheckbox, FormControl, FormControlLabel } from '@mui/material';
 import { Messages } from './Messages';
 
