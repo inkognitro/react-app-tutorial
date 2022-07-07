@@ -96,8 +96,9 @@ One of these libraries is [Axios](https://www.npmjs.com/package/axios).
 As of today (year 2022), Axios is the most common library for this.
 One might argue, that the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
 could be taken as well, but [older browsers do not support this](https://caniuse.com/?search=fetch).
-So let's write an axios implementation for the `RequestHandler` interface, like we have defined before:
 
+Run the command `npm install axios --save` to install Axios.
+Next let's write an Axios implementation for the `RequestHandler` interface, we have defined before:
 ```typescript
 // src/packages/core/http/axiosRequestHandler.ts
 
