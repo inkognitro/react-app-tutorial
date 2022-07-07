@@ -536,10 +536,9 @@ export function useApiV1RequestHandler(
 ```
 
 Congratulations! If you submit the form with skipped form elements, an
-error toast will automatically be shown, because the API endpoint listed it in the `generalMessages` property
-of the response body.
-If you didn't want to see any general message toast, you could just configure the hook by using it like
-`useApiV1RequestHandler({ showToasts: false });`.
+error toast will show automatically, because it is listed in the `generalMessages` property of the response body.
+If you don't want having toast messages dispatched for the received general messages,
+you can just use the hook with the appropriate config: `useApiV1RequestHandler({ showToasts: false });`.
 
 :floppy_disk: [branch 09-wiring-2](https://github.com/inkognitro/react-app-tutorial-code/compare/09-wiring-1...09-wiring-2)
 
