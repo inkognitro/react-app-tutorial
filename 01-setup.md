@@ -16,6 +16,9 @@ which is readable for all browsers.
 Not only Webpack handles the transpiling, but also supports hot reloading, code splitting and finally the bundling of your
 production app. So Webpack takes care of a lot of stuff which makes our life much easier.
 
+Before you start with section 1.1, please make sure you have at least installed Node version 16.16.0.
+Otherwise, you might face problems while going through this tutorial.
+
 ### 1.1 Installation
 With [create-react-app](https://create-react-app.dev) it goes stunningly fast to start a new React project.
 The only thing you need todo is to open your console and create a new project folder by executing the command below.
