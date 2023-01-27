@@ -1,4 +1,5 @@
-> :raised_hands: Special thanks go to [easylearn schweiz ag](https://easylearn.ch). This is the company I currently work for.
+> :raised_hands: Special thanks go to [easylearn schweiz ag](https://easylearn.ch).
+> This is the company I currently work for.
 > Our managers allowed me to create parts of this tutorial at working time.
 
 # react-app-tutorial
@@ -44,7 +45,3 @@ Below you can see an overview of all steps of this tutorial.
 > Feel free to use the code for your own project. It's available under the MIT license :wink:
 
 [Let's start »](01-setup.md)
-
-## Collected feedbacks
-[Sam](https://github.com/sami-akkawi):
-- **Chapter 3:** Maybe explain a bit about the external components that we are using, like: Context.Provider, Typography/Toolbar and their props like component, variant, sx

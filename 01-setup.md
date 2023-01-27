@@ -71,8 +71,7 @@ Luckily create-react-app comes with installed linting packages out of the box.
 I suggest integrating an automatic lint fixing process in your CI pipeline.
 If you don't like CI processes to push changes into your codebase,
 I suggest integrating at least the check of the linting rules.
-To be able to automatically format your code, let's add `prettier`
-which goes hand in hand with the already installed `eslint`:
+To be able to automatically format your code, let's add the prettier plugin for the already installed `eslint`:
 
 ```
 npm install eslint-plugin-prettier@latest --save-dev

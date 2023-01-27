@@ -187,6 +187,7 @@ and make sure that the `<App>` component is wrapped with it.
 ```typescript jsx
 // src/index.tsx
 
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';

@@ -24,8 +24,6 @@ The distinction between these two does also align with the naming in the React-A
 > :bulb: Marmelab's React-Admin uses a similar pattern called
 > [data providers](https://marmelab.com/react-admin/DataProviders.html).
 > Even creation, updating and deletion of one or multiple entities is supported.
->
-> `https://www.javatpoint.com/collections-in-java, 2022-06-21`
 
 I suggest only supporting the fetch of entities, with filter, sorting and pagination params
 by such a "collection provider". As of my experience in frontend programming, writing and storing data is often an 
@@ -309,7 +307,6 @@ export const CoreSelection: FC<CoreSelectionProps> = (props) => {
 ```
 
 Next, let's support a new form element type `SINGLE_SELECTION`, by doing the following steps:
-
 ```typescript
 // src/packages/core/form/formElementState.ts
 
@@ -327,7 +324,7 @@ export enum FormElementTypes {
 export type SingleSelectionState<D = any> = GenericFormElementState<
     FormElementTypes.SINGLE_SELECTION,
     { chosenOption: null | Entry<D>; messages: Message[] }
-    >;
+>;
 
 // Add the state to the FormElementState union type:
 export type FormElementState = TextFieldState | CheckboxState | SingleSelectionState;
@@ -346,11 +343,63 @@ export function createSingleSelectionState<D = any>(
 }
 ```
 
+As a next step, we should create the `SingleSelection` component which is using the `CoreSelection`:
+```typescript jsx
+// src/packages/core/form/SingleSelection.tsx
+
+import React, { FC, ReactNode } from 'react';
+import { CollectionProvider, Entry } from '@packages/core/collection';
+import { CoreSelection } from './CoreSelection';
+import { Messages } from './Messages';
+import { SingleSelectionState } from './formElementState';
+
+export type SingleSelectionProps<Data = any> = {
+    provider: CollectionProvider<Data>;
+    data: SingleSelectionState<Data>;
+    renderOption: (entry: Entry<Data>) => ReactNode;
+    onChangeData?: (data: SingleSelectionState<Data>) => void;
+    variant?: 'standard' | 'outlined' | 'filled';
+    margin?: 'dense' | 'normal' | 'none';
+    label?: ReactNode;
+    canChooseNone?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
+    fullWidth?: boolean;
+    size?: 'small' | 'medium';
+};
+
+export const SingleSelection: FC<SingleSelectionProps> = (props) => {
+    const hasErrorMessages = !!props.data.messages.find((m) => m.severity === 'error');
+    return (
+        <CoreSelection
+            variant={props.variant}
+            margin={props.margin}
+            label={props.label}
+            canChooseNone={props.canChooseNone}
+            disabled={props.disabled}
+            readOnly={props.readOnly}
+            fullWidth={props.fullWidth}
+            size={props.size}
+            options={props.provider.entries}
+            chosenOption={props.data.chosenOption}
+            onChange={(chosenOption) => {
+                if (props.onChangeData) {
+                    props.onChangeData({ ...props.data, chosenOption });
+                }
+            }}
+            renderOption={props.renderOption}
+            error={hasErrorMessages}
+            errorSection={props.data.messages.length ? <Messages messages={props.data.messages} /> : undefined}
+        />
+    );
+};
+```
+
 Don't forget to support the automatic form element message enrichment by adding the
 `FormElementTypes.SINGLE_SELECTION` in the switch statement of `formElementStatesEnrichment.ts`,
-like we have done it for the text field and the checkbox.
+like we have done it for the `TextField` and the `Checkbox`.
 
-And we also have to add the translation key for `core.form.selection.choose`:
+Finally, let's add the translation key for `core.form.selection.choose`:
 
 ```json
 // src/components/translations/deCH.json

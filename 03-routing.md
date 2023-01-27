@@ -223,7 +223,7 @@ export const IndexPage: FC = () => {
 
 The `RegisterPage`, within we are going to build the user registration form:
 ```typescript jsx
-// src/pages/auth/Register.tsx
+// src/pages/auth/RegisterPage.tsx
 
 import { FC } from 'react';
 import { NavBarPage } from '@components/page-layout';
@@ -371,7 +371,7 @@ function App() {
     const currentUserRepo = useCurrentUserRepository();
     useEffect(() => {
         currentUserRepo.init();
-    }, []);
+    }, [currentUserRepo]);
     return <AppRoutes />;
 }
 
@@ -400,11 +400,10 @@ npm install @mui/material @mui/icons-material --save
 ```
 
 Material UI comes with the [emotion](https://emotion.sh/docs/introduction) library by default for adding custom css.
-These two libraries are almost the same.
 In this tutorial, we go with [styled-components](https://styled-components.com/) instead,
 to gain more experience about what is going on under the hood with webpack and TS.
 
-To have a comparison of these two libraries, just have a look at
+These two libraries are almost the same. To have a comparison, just have a look at
 [this LogRocket article](https://blog.logrocket.com/styled-components-vs-emotion-for-handling-css/).
 With [MUI](https://mui.com/) we need to switch its styled-engine to [styled-components](https://styled-components.com/).
 
@@ -491,7 +490,7 @@ export const BlankPage: FC<BlankPageProps> = (props) => {
 };
 ```
 
-### 3.11 Provide the theme
+### 3.10 Provide the theme
 To be able to access the theme we should create one and provide it like so:
 
 ```typescript jsx
@@ -529,7 +528,7 @@ return (
 );
 ```
 
-### 3.10 Provide reusable link components
+### 3.11 Provide reusable link components
 We should provide two different link components. Both should play well with the props of `@mui/material`'s link component.
 One link component should have the functionality of `react-router-dom`'s `Link` to route to another url.
 With the other link component it should be possible to only execute stuff by the `onClick` property without routing.
@@ -577,7 +576,7 @@ As always, we leak our public available components of the package with an `index
 export * from './Link';
 ```
 
-### 3.11 Prevent our navigation from causing eye cancer
+### 3.12 Prevent our navigation from causing eye cancer
 Now that we have MUI installed, we can use its components and provide a better
 nav bar with no effort.
 

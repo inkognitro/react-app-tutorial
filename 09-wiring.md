@@ -152,11 +152,11 @@ and
 },
 ```
 
-### 9.3 Provide the ApiV1RequestHandler
-To use the `ApiV1RequestHandler` we need to provide it in the `ServiceContainer` like we did also for other services:
+### 9.2 Provide the ApiV1RequestHandler
+To use the `ApiV1RequestHandler` we need to provide it in the `ServiceProvider` like we did also for other services:
 
 ```typescript jsx
-// src/ServiceContainer.tsx
+// src/ServiceProvider.tsx
 
 // Replace following import statement:
 import React, { FC, MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from 'react';
@@ -201,7 +201,7 @@ return (
 );
 ```
 
-### 9.4 Wire the user registration form
+### 9.3 Wire the user registration form
 To be able to enrich our form elements with messages, we need to define a `pathPart` for those.
 It is important that we define the same `pathPart` on the specific form elements
 which is delivered from the API field message, otherwise the form element state is not going to be 
@@ -240,6 +240,8 @@ import { ApiV1ResponseTypes, useApiV1RequestHandler } from '@packages/core/api-v
 import { registerUser } from '@packages/core/api-v1/auth';
 import { useCurrentUserRepository } from '@packages/core/auth';
 import { useNavigate } from 'react-router-dom';
+
+// Add "getStateWithEnrichedFormElementStates" to the imports from '@packages/core/form';
 
 // Add the "onSubmit" callback to the RegistrationFormProps, so that the props definition looks like so:
 type RegistrationFormProps = {
@@ -327,7 +329,7 @@ Let's make these general messages dispatching a toast message for each of them.
 
 :floppy_disk: [branch 09-wiring-1](https://github.com/inkognitro/react-app-tutorial-code/compare/08-apiv1-2...09-wiring-1)
 
-### 9.5 Support any request handler middleware
+### 9.4 Support any request handler middleware
 To show the general messages of an API endpoint response, we need to write something like
 a toaster middleware for the request handler. Let's try to define an interface for it:
 
@@ -338,6 +340,8 @@ export type ApiV1RequestHandlerMiddleware = {
     onRequest?: (r: ApiV1Request) => void;
     onRequestResponse?: (rr: ApiV1RequestResponse) => void;
 };
+
+// Don't forget to import the "ApiV1Request" from the './types' file
 ```
 
 Next let's support middlewares in the `ScopedApiV1RequestHandler`, so that the class looks like below:
@@ -403,7 +407,7 @@ export class ScopedApiV1RequestHandler implements ApiV1RequestHandler {
 }
 ```
 
-### 9.6 Provide the toaster middleware
+### 9.5 Provide the toaster middleware
 Now that the `ScopedApiV1RequestHandler` supports middlewares, we can write a middleware for it, which
 handles the `ApiV1RequestResponse` and dispatches toast messages when required.
 In case of a lost connection, the user should probably be informed about that.
@@ -498,7 +502,10 @@ See the code below, which enhances the `useApiV1RequestHandler` hook, to better 
 ```typescript
 // src/packages/core/api-v1/core/scopedRequestHandler.ts
 
-// other stuff...
+// Add the following import statement:
+import { useNullableApiV1ToasterMiddleware } from './toasterMiddleware';
+
+// Let the existing code be like it is and add the following custom hook:
 
 type UseApiV1RequestHandlerConfig = {
     showToasts: boolean;
@@ -536,10 +543,9 @@ export function useApiV1RequestHandler(
 ```
 
 Congratulations! If you submit the form with skipped form elements, an
-error toast will automatically be shown, because the API endpoint listed it in the `generalMessages` property
-of the response body.
-If you didn't want to see any general message toast, you could just configure the hook by using it like
-`useApiV1RequestHandler({ showToasts: false });`.
+error toast will show automatically, because it is listed in the `generalMessages` property of the response body.
+If you don't want having toast messages dispatched for the received general messages,
+you can just use the hook with the appropriate config: `useApiV1RequestHandler({ showToasts: false });`.
 
 :floppy_disk: [branch 09-wiring-2](https://github.com/inkognitro/react-app-tutorial-code/compare/09-wiring-1...09-wiring-2)
 
